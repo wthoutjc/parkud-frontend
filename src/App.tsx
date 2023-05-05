@@ -1,3 +1,5 @@
+import "./styles/global.css";
+
 // MUI
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { lightTheme } from "./themes";
@@ -5,6 +7,9 @@ import { lightTheme } from "./themes";
 // Redux
 import { Provider } from "react-redux";
 import { store } from "./store";
+
+// Components
+import { Navbar, Notifications } from "./components";
 
 // React Router DOM
 import { publicRoutes } from "./routes";
@@ -27,6 +32,8 @@ function App() {
       <CssBaseline />
       <Provider store={store}>
         <CssBaseline />
+        <Notifications />
+        <Navbar />
         <RouterProvider router={router} />
       </Provider>
     </ThemeProvider>
