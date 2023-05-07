@@ -1,4 +1,4 @@
-import "./styles/global.css";
+import "./styles/styles.scss";
 
 // MUI
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -9,7 +9,7 @@ import { Provider } from "react-redux";
 import { store } from "./store";
 
 // Components
-import { Navbar, Notifications } from "./components";
+import { Notifications } from "./components";
 
 // React Router DOM
 import { publicRoutes } from "./routes";
@@ -33,7 +33,6 @@ function App() {
       <Provider store={store}>
         <CssBaseline />
         <Notifications />
-        <Navbar />
         <RouterProvider router={router} />
       </Provider>
     </ThemeProvider>

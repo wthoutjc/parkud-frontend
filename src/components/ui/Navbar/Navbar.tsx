@@ -6,10 +6,31 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
+import { ButtonProps } from "@mui/material/Button";
+
+// React Router DOM
+import { Link } from "react-router-dom";
+
+// Styled Components
+import { styled } from "@mui/material/styles";
+
+const StyledButton = styled(Button)<ButtonProps>(({ theme }) => ({
+  backgroundColor: theme.palette.background.default,
+  color: theme.palette.text.primary,
+  "&:hover": {
+    color: theme.palette.background.default,
+  },
+}));
 
 const Navbar = () => {
   return (
-    <AppBar position="static">
+    <AppBar
+      position="static"
+      sx={{
+        backgroundColor: "background.default",
+        color: "text.primary",
+      }}
+    >
       <Container maxWidth="xl">
         <Toolbar
           disableGutters
@@ -62,16 +83,38 @@ const Navbar = () => {
               display: "flex",
             }}
           >
-            <Button variant="contained" sx={{ my: 2, display: "block" }}>
-              Iniciar sesión
-            </Button>
-            <Button
-              variant="contained"
-              sx={{ my: 2, display: "block", ml: 2 }}
-              color="secondary"
+            <Link
+              to={"/login"}
+              style={{
+                textDecoration: "none",
+                color: "inherit",
+              }}
             >
-              Regístrate
-            </Button>
+              <StyledButton
+                variant="contained"
+                sx={{
+                  my: 2,
+                  display: "block",
+                  backgroundColor: "background.default",
+                }}
+              >
+                Iniciar sesión
+              </StyledButton>
+            </Link>
+            <Link
+              to={"/signup"}
+              style={{
+                textDecoration: "none",
+                color: "inherit",
+              }}
+            >
+              <Button
+                variant="contained"
+                sx={{ my: 2, display: "block", ml: 2 }}
+              >
+                Regístrate
+              </Button>
+            </Link>
           </Box>
         </Toolbar>
       </Container>
