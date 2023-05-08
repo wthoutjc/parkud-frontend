@@ -42,7 +42,7 @@ const LogIn = () => {
   };
 
   return (
-    <Box className="login__container">
+    <Box className={"login__container"}>
       <Box
         className={"login__left login__animation-toRight"}
         sx={{
@@ -65,7 +65,6 @@ const LogIn = () => {
                     ? errors.email.message
                     : "Escibe tu correo electrónico..."
                 }
-                // onBlur={() => setTouchedUser(true)}
                 {...register("email", {
                   required: "El correo electrónico es obligatorio",
                 })}

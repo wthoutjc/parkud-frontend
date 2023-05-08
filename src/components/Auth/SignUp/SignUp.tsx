@@ -3,10 +3,9 @@ import { Box, InputAdornment, Typography } from "@mui/material";
 
 // Icons
 import EmailIcon from "@mui/icons-material/Email";
-import PersonIcon from "@mui/icons-material/Person";
-import PasswordIcon from "@mui/icons-material/Password";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import VisibilityIcon from "@mui/icons-material/Visibility";
+import SwitchAccountIcon from "@mui/icons-material/SwitchAccount";
+import BadgeIcon from "@mui/icons-material/Badge";
+import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 
 // React Hook Form
 import { useForm } from "react-hook-form";
@@ -16,18 +15,14 @@ import {
   StyledTextField,
   StyledButton,
   StyledButton2,
+  PaySignUp,
 } from "../../../components";
 
 // React Router DOM
 import { Link } from "react-router-dom";
 
-interface ISignUp {
-  email: string;
-  name: string;
-  lastName: string;
-  password: string;
-  password2: string;
-}
+// Interfaces
+import { ISignUp } from "../../../interfaces";
 
 const SignUp = () => {
   const {
@@ -37,12 +32,15 @@ const SignUp = () => {
     formState: { errors },
   } = useForm<ISignUp>();
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [showCPassword, setShowCPassword] = useState(false);
+  const [payMethod, setPayMethod] = useState(false);
 
-  const handleSignup = async () => {
+  const handlePayMethod = async () => {
     console.log("handleLogin");
+    setPayMethod(true);
   };
+
+  if (payMethod)
+    return <PaySignUp {...watch()} back={() => setPayMethod(false)} />;
 
   return (
     <Box className={"signup__container"}>
@@ -53,163 +51,128 @@ const SignUp = () => {
           color: "secondary.contrastText",
         }}
       >
-        <Typography variant="h4" color={"secondary.contrastText"}>
-          Crear una cuenta
-        </Typography>
-        <Box sx={{ boxSizing: "border-box", padding: "1em", width: "100%" }}>
-          <form onSubmit={handleSubmit(handleSignup)}>
-            <StyledTextField
-              fullWidth
-              color="secondary"
-              sx={{ marginBottom: "1em", color: "white" }}
-              placeholder="E-mail*"
-              label="E-mail"
-              error={!!errors.email}
-              helperText={
-                errors.email
-                  ? errors.email.message
-                  : "Escibe tu correo electrónico..."
-              }
-              // onBlur={() => setTouchedUser(true)}
-              {...register("email", {
-                required: "El correo electrónico es obligatorio",
-              })}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <EmailIcon />
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <Box sx={{ display: "flex" }}>
+        <Typography variant="h4">Crear una cuenta</Typography>
+        <Box display={"flex"}>
+          <Box sx={{ boxSizing: "border-box", padding: "1em", width: "100%" }}>
+            <form onSubmit={handleSubmit(handlePayMethod)}>
               <StyledTextField
                 fullWidth
-                sx={{ marginBottom: "1em" }}
-                placeholder="Ej. Juan"
-                label="Nombre*"
-                error={!!errors.name}
+                color="secondary"
+                sx={{ marginBottom: "1em", color: "white" }}
+                placeholder="E-mail*"
+                label="E-mail"
+                error={!!errors.email}
                 helperText={
-                  errors.name ? errors.name.message : "Escibe tu nombre..."
+                  errors.email
+                    ? errors.email.message
+                    : "Escibe tu correo electrónico..."
                 }
-                {...register("name", {
-                  required: "El nombre es obligatorio",
+                {...register("email", {
+                  required: "El correo electrónico es obligatorio",
                 })}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <PersonIcon />
+                      <EmailIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <Box sx={{ display: "flex" }}>
+                <StyledTextField
+                  fullWidth
+                  sx={{ marginBottom: "1em" }}
+                  placeholder="Ej. Juan"
+                  label="Nombre*"
+                  error={!!errors.name}
+                  helperText={
+                    errors.name ? errors.name.message : "Escibe tu nombre..."
+                  }
+                  {...register("name", {
+                    required: "El nombre es obligatorio",
+                  })}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <BadgeIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+                <StyledTextField
+                  fullWidth
+                  sx={{ marginBottom: "1em", ml: 2 }}
+                  placeholder="Ej. Pérez"
+                  label="Apellido*"
+                  error={!!errors.lastName}
+                  helperText={
+                    errors.lastName
+                      ? errors.lastName.message
+                      : "Escibe tu apellido..."
+                  }
+                  {...register("lastName", {
+                    required: "El apellido es obligatorio",
+                  })}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <BadgeIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Box>
+              <StyledTextField
+                fullWidth
+                type="text"
+                placeholder="Ej Usuario123"
+                label="Nombre de usuario*"
+                error={!!errors.username}
+                sx={{ mb: 2 }}
+                helperText={
+                  errors.username
+                    ? errors.username.message
+                    : "Confirma tu contraseña..."
+                }
+                {...register("username", {
+                  required: "El nombre de usuario es obligatorio",
+                })}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SwitchAccountIcon />
                     </InputAdornment>
                   ),
                 }}
               />
               <StyledTextField
                 fullWidth
-                sx={{ marginBottom: "1em", ml: 2 }}
-                placeholder="Ej. Pérez"
-                label="Apellido*"
-                error={!!errors.lastName}
+                color="secondary"
+                sx={{ marginBottom: "1em", color: "white" }}
+                placeholder="Ej 3001234567"
+                label="Número de celular*"
+                error={!!errors.phone}
                 helperText={
-                  errors.lastName
-                    ? errors.lastName.message
-                    : "Escibe tu apellido..."
+                  errors.phone
+                    ? errors.phone.message
+                    : "Escibe tu número de celular..."
                 }
-                {...register("lastName", {
-                  required: "El apellido es obligatorio",
+                {...register("phone", {
+                  required: "El número de celular es obligatorio",
                 })}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <PersonIcon />
+                      <PhoneAndroidIcon />
                     </InputAdornment>
                   ),
                 }}
               />
-            </Box>
-            <StyledTextField
-              fullWidth
-              type={showPassword ? "text" : "password"}
-              placeholder="*****"
-              label="Password"
-              error={!!errors.password}
-              sx={{ marginBottom: "1em" }}
-              helperText={
-                errors.password
-                  ? errors.password.message
-                  : "Escibe tu contraseña..."
-              }
-              {...register("password", {
-                required: "La contraseña es obligatoria",
-              })}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <PasswordIcon />
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    {showPassword ? (
-                      <VisibilityOffIcon
-                        onClick={() => setShowPassword(!showPassword)}
-                        style={{ cursor: "pointer" }}
-                      />
-                    ) : (
-                      <VisibilityIcon
-                        onClick={() => setShowPassword(!showPassword)}
-                        style={{ cursor: "pointer" }}
-                      />
-                    )}
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <StyledTextField
-              fullWidth
-              type={showCPassword ? "text" : "password"}
-              placeholder="*****"
-              label="Confirmar contraseña"
-              error={!!errors.password2}
-              sx={{ mb: 2 }}
-              helperText={
-                errors.password2
-                  ? errors.password2.message
-                  : "Confirma tu contraseña..."
-              }
-              {...register("password2", {
-                required: "La contraseña es obligatoria",
-                validate: (value) =>
-                  value === watch("password")
-                    ? undefined
-                    : "Las contraseñas no coinciden",
-              })}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <PasswordIcon />
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    {showCPassword ? (
-                      <VisibilityOffIcon
-                        onClick={() => setShowCPassword(!showCPassword)}
-                        style={{ cursor: "pointer" }}
-                      />
-                    ) : (
-                      <VisibilityIcon
-                        onClick={() => setShowCPassword(!showCPassword)}
-                        style={{ cursor: "pointer" }}
-                      />
-                    )}
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <StyledButton type="submit" variant="contained" fullWidth>
-              Crear cuenta
-            </StyledButton>
-          </form>
+              <StyledButton type="submit" variant="contained" fullWidth>
+                Crear cuenta
+              </StyledButton>
+            </form>
+          </Box>
         </Box>
       </Box>
       <Box
@@ -219,7 +182,7 @@ const SignUp = () => {
         }}
       >
         <Typography variant="h4" className="fade-animation">
-        ¡Hazte miembro hoy!
+          ¡Hazte miembro hoy!
         </Typography>
         <Typography variant="body1" className="fade-animation">
           Introduzca sus datos personales y empiece a viajar con nosotros
