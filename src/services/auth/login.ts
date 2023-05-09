@@ -8,6 +8,7 @@ import {
   ILogin,
   IResponseTwoFactor,
   IResponseLogIn,
+  IResponse,
 } from "../../interfaces";
 
 const logIn = async (LogIn: ILogin): Promise<IResponseLogIn> => {
@@ -60,7 +61,37 @@ const twoFactor = async (
       },
     });
 
-    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return {
+        error: error.response?.data.error || "Falló la solicitud al servidor",
+        success: false,
+        cambiarContrasena: 0,
+      };
+    }
+
+    return {
+      error: "Falló la solicitud al servidor",
+      success: false,
+      cambiarContrasena: 0,
+    };
+  }
+};
+
+const updatePassword = async (password: string): Promise<IResponse> => {
+  try {
+    const response = await api.put(
+      `/usuario/cambiar_contrasena`,
+      { nueva_contrasena: password },
+      {
+        headers: {
+          Authorization: `${localStorage.getItem("token-parkud")}`,
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      }
+    );
 
     return response.data;
   } catch (error) {
@@ -78,4 +109,4 @@ const twoFactor = async (
   }
 };
 
-export { logIn, twoFactor };
+export { logIn, twoFactor, updatePassword };

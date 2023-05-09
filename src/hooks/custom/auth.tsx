@@ -9,7 +9,7 @@ import { useAppDispatch } from "../redux";
 import { resetRequest, setRequest, newNotification } from "../../reducers";
 
 // Services
-import { logIn, twoFactor } from "../../services";
+import { logIn, twoFactor, updatePassword } from "../../services";
 
 // Interfaces
 import { ILogin, IUser } from "../../interfaces";
@@ -24,6 +24,7 @@ interface AuthProps {
   message: string;
   twoFactor: boolean;
   user: IUser | null;
+  updatePassword: 1 | 0;
 }
 
 const useAuth = () => {
@@ -32,13 +33,24 @@ const useAuth = () => {
     message: "",
     twoFactor: false,
     user: null,
+    updatePassword: 0,
   });
+
+  const resetStatus = () => {
+    setStatus({
+      error: false,
+      message: "",
+      twoFactor: false,
+      user: null,
+      updatePassword: 0,
+    });
+  };
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const LogIn = useCallback(async (loginData: ILogin) => {
-    setStatus({ error: false, message: "", twoFactor: false, user: null });
+    resetStatus();
     const { success, error, message, user } = await logIn(loginData);
 
     if (success && user) {
@@ -57,6 +69,7 @@ const useAuth = () => {
           "Se ha enviado un correo de verificación, por favor revisa tu bandeja de entrada ",
         twoFactor: true,
         user: newUser,
+        updatePassword: 0,
       });
     }
 
@@ -65,13 +78,15 @@ const useAuth = () => {
       message: error ?? "Error al iniciar sesión",
       twoFactor: false,
       user: null,
+      updatePassword: 0,
     });
   }, []);
 
   const TwoFactor = useCallback(
     async (code: string, user: IUser) => {
-      setStatus({ error: false, message: "", twoFactor: false, user });
-      const { success, error, message, token } = await twoFactor(code, user.id);
+      resetStatus();
+      const { success, error, message, token, cambiarContrasena } =
+        await twoFactor(code, user.id);
 
       if (success && token) {
         localStorage.setItem("token-parkud", token);
@@ -90,6 +105,7 @@ const useAuth = () => {
           message: message ?? "Sesión iniciada correctamente",
           twoFactor: false,
           user,
+          updatePassword: cambiarContrasena,
         });
       }
 
@@ -98,8 +114,34 @@ const useAuth = () => {
         message: error ?? "Error al iniciar sesión",
         twoFactor: true,
         user: null,
+        updatePassword: 0,
       });
     },
+    [dispatch]
+  );
+
+  const UpdatePassword = useCallback(
+    async (password: string) => {
+      const { success, error, message } = await updatePassword(password);
+      const notification = {
+        id: uuid(),
+        title: success ? "Registro exitoso" : "Error al registrarse",
+        message: success
+          ? message ?? "Usuario registrado correctamente"
+          : error ?? "Error al registrarse",
+        type: success ? "success" : ("error" as "success" | "error"),
+        autoDismiss: 5000,
+      };
+      dispatch(newNotification(notification));
+
+      if (success) {
+        setStatus({
+          ...status,
+          updatePassword: 0,
+        });
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [dispatch]
   );
 
@@ -111,7 +153,7 @@ const useAuth = () => {
         action: "Cerrando sesión",
       })
     );
-    setStatus({ error: false, message: "", twoFactor: false, user: null });
+    resetRequest();
 
     try {
       // const res = await logoutService();
@@ -134,6 +176,7 @@ const useAuth = () => {
     LogIn,
     LogOut,
     TwoFactor,
+    UpdatePassword,
   };
 };
 
