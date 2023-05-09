@@ -14,13 +14,13 @@ const Notifications = () => {
       sx={{
         position: "absolute",
         right: "10px",
-        top: "5px",
+        bottom: 0,
         zIndex: 20000,
         height: "fit-content",
-        maxHeight: "50vh",
+        maxHeight: "100vh",
         width: "300px",
         overflow: "auto",
-        "::webkit-scrollbar": {
+        "&::-webkit-scrollbar": {
           display: "none",
         },
       }}

@@ -1,4 +1,5 @@
 import "./styles/styles.scss";
+import "animate.css";
 
 // MUI
 import { CssBaseline, ThemeProvider } from "@mui/material";

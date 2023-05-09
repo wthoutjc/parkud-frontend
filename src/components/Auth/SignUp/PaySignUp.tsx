@@ -2,10 +2,13 @@ import { useState } from "react";
 import { Box, Typography, InputAdornment, MenuItem } from "@mui/material";
 
 // Interfaces
-import { ISignUp } from "../../../interfaces";
+import { ISignUp, IPaySignUp } from "../../../interfaces";
 
 // React Hook Form
 import { useForm } from "react-hook-form";
+
+// React Router DOM
+import { useNavigate } from "react-router-dom";
 
 // Icons
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -26,36 +29,61 @@ import {
 // React Router DOM
 import { Link } from "react-router-dom";
 
-interface IPaySignUp {
-  cardNumber: string;
-  cardName: string;
-  cardDate: string;
-  cardCvv: string;
-  cardType: string;
-  typeCard: "C" | "D" | "Seleccionar";
-  idNumber: string;
-}
+// Services
+import { SignUp } from "../../../services";
 
-interface Props extends ISignUp {
+// uuid
+import { v4 as uuid } from "uuid";
+
+// Redux
+import { useAppDispatch } from "../../../hooks";
+import { newNotification } from "../../../reducers";
+
+interface Props {
   back: () => void;
+  signUpPrev: ISignUp;
 }
 
-const PaySignUp = ({ back }: Props) => {
+const PaySignUp = ({ back, signUpPrev }: Props) => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(false);
   const [showCvv, setShowCvv] = useState(false);
 
   const {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm<IPaySignUp>({
     defaultValues: {
-      typeCard: "Seleccionar",
+      cardType: "Seleccionar",
     },
   });
 
-  const handleSignup = async () => {
-    console.log("handleLogin");
+  const handleSignup = async (data: IPaySignUp) => {
+    setLoading(true);
+    const { success, error, message } = await SignUp({
+      ...signUpPrev,
+      ...data,
+    });
+    const notification = {
+      id: uuid(),
+      title: success ? "Registro exitoso" : "Error al registrarse",
+      message: success
+        ? message ?? "Usuario registrado correctamente"
+        : error ?? "Error al registrarse",
+      type: success ? "success" : ("error" as "success" | "error"),
+      autoDismiss: 5000,
+    };
+    dispatch(newNotification(notification));
+    setLoading(false);
+    if (success) {
+      reset();
+      return navigate("/login");
+    }
   };
 
   return (
@@ -79,21 +107,22 @@ const PaySignUp = ({ back }: Props) => {
               >
                 <StyledTextField
                   select
+                  disabled={loading}
                   label="Tipo de tarjeta*"
-                  error={!!errors.typeCard}
+                  error={!!errors.cardType}
                   sx={{ mb: 2, mr: 2, width: "40%" }}
                   helperText={
-                    errors.typeCard
-                      ? errors.typeCard.message
+                    errors.cardType
+                      ? errors.cardType.message
                       : "Selecciona el tipo de tarjeta..."
                   }
-                  {...register("typeCard", {
+                  {...register("cardType", {
                     required: "El tipo de archivo es requerido",
                     validate: (value) =>
                       value !== "Seleccionar" ||
                       "Selecciona un tipo de tarjeta",
                   })}
-                  value={watch("typeCard")}
+                  value={watch("cardType")}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -107,6 +136,7 @@ const PaySignUp = ({ back }: Props) => {
                   <MenuItem value={"D"}>Débito</MenuItem>
                 </StyledTextField>
                 <StyledTextField
+                  disabled={loading}
                   fullWidth
                   type="text"
                   sx={{ marginBottom: "1em", width: "60%" }}
@@ -134,6 +164,7 @@ const PaySignUp = ({ back }: Props) => {
                 />
               </Box>
               <StyledTextField
+                disabled={loading}
                 fullWidth
                 sx={{ marginBottom: "1em" }}
                 placeholder="Ej PEPE PEREZ"
@@ -158,6 +189,7 @@ const PaySignUp = ({ back }: Props) => {
                 }}
               />
               <StyledTextField
+                disabled={loading}
                 fullWidth
                 sx={{ marginBottom: "1em" }}
                 type="text"
@@ -190,6 +222,7 @@ const PaySignUp = ({ back }: Props) => {
                 }}
               >
                 <StyledTextField
+                  disabled={loading}
                   fullWidth
                   sx={{ marginBottom: "1em" }}
                   placeholder="MM/AA"
@@ -222,6 +255,7 @@ const PaySignUp = ({ back }: Props) => {
                   }}
                 />
                 <StyledTextField
+                  disabled={loading}
                   fullWidth
                   type={showCvv ? "text" : "password"}
                   sx={{ marginBottom: "1em", ml: 2 }}
@@ -261,8 +295,13 @@ const PaySignUp = ({ back }: Props) => {
                   }}
                 />
               </Box>
-              <StyledButton type="submit" variant="contained" fullWidth>
-                Completar registro
+              <StyledButton
+                type="submit"
+                variant="contained"
+                fullWidth
+                disabled={loading}
+              >
+                {loading ? "Espere, por favor" : "Completar registro"}
               </StyledButton>
             </form>
           </Box>
@@ -285,6 +324,7 @@ const PaySignUp = ({ back }: Props) => {
             variant={"outlined"}
             className="fade-animation"
             onClick={back}
+            disabled={loading}
           >
             <Typography variant="body1">Volver</Typography>
           </StyledButton2>
