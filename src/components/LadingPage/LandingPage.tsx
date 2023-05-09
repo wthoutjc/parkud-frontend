@@ -1,5 +1,5 @@
 // Components
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Typography, Divider } from "@mui/material";
 import welcomeImg from "../../styles/img/welcome.png";
 import Circle from "../../styles/img/Circle.png";
 import IC1 from "../../styles/img/IC1.png";
@@ -36,7 +36,13 @@ const LandingPage = () => {
           <img className="car" src={welcomeImg} alt="Welcome image" />
         </Box>
       </section>
-      <Box className="services">
+      <Box
+        className="services"
+        sx={{
+          backgroundColor: "primary.dark",
+          color: "primary.contrastText",
+        }}
+      >
         <Box className="titles">
           <h2>Únete a miles de clientes satisfechos</h2>
           <p>
@@ -47,7 +53,7 @@ const LandingPage = () => {
         <Box
           className="clients"
           sx={{
-            overflow: "hidden",
+            p: 2,
           }}
         >
           <Box
@@ -58,17 +64,21 @@ const LandingPage = () => {
             <img src={Patterns} alt="patterns-parkud" />
           </Box>
           <div className="percent">
-            <h3>100+</h3>
+            <Typography variant="h3">100+</Typography>
             <p>Ubicaciones</p>
           </div>
+          a
+          <Divider orientation="vertical" variant="middle" flexItem />
           <div className="percent">
             <h3>24/7</h3>
             <p>Para hospitales</p>
           </div>
+          <Divider orientation="vertical" variant="middle" flexItem />
           <div className="percent">
             <h3>95%</h3>
             <p>Satisfacción</p>
           </div>
+          <Divider orientation="vertical" variant="middle" flexItem />
           <div className="percent">
             <h3>50.000+</h3>
             <p>Conductores registrados</p>
