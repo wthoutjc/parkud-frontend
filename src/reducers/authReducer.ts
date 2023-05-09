@@ -12,7 +12,6 @@ const initialState: IAuth = {
     lastname: "",
     email: "",
     hierarchy: "",
-    expires: 0,
   },
 };
 
@@ -31,14 +30,10 @@ const authSlice = createSlice({
         lastname: "",
         email: "",
         hierarchy: "",
-        expires: 0,
       };
     },
     setUser: (state: IAuth, action: { payload: IUser }) => {
       state.user = action.payload;
-    },
-    setExpires: (state: IAuth, action: { payload: number }) => {
-      state.user.expires = action.payload;
     },
   },
 });
@@ -46,7 +41,7 @@ const authSlice = createSlice({
 export { authSlice };
 
 // Actions
-export const { login, logout, setUser, setExpires } = authSlice.actions;
+export const { login, logout, setUser } = authSlice.actions;
 
 // Selector to access to the store
 export const selectAuth = (state: AppState) => state.auth;

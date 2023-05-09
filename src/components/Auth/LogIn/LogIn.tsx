@@ -1,45 +1,54 @@
 import { useState } from "react";
 import { Box, InputAdornment, Typography } from "@mui/material";
 
-// Redux
-// import { useAppDispatch } from "../../../hooks";
+// Interfaces
+import { ILogin } from "../../../interfaces";
 
 // Icons
 import PasswordIcon from "@mui/icons-material/Password";
-import EmailIcon from "@mui/icons-material/Email";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
 // React Hook Form
 import { useForm } from "react-hook-form";
 
-// Styled Components
+// Styled Components & Components
 import {
   StyledTextField,
   StyledButton,
   StyledButton2,
+  TwoFactor,
 } from "../../../components";
 
 // React Router DOM
 import { Link } from "react-router-dom";
 
-interface ILogin {
-  email: string;
-  password: string;
-}
+// Auth - Custom Hook
+import { useAuth } from "../../../hooks";
 
 const LogIn = () => {
+  const { status, LogIn: logIn } = useAuth();
+  const { error, message, twoFactor } = status;
+
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<ILogin>();
 
-  const handleLogin = async () => {
-    console.log("handleLogin");
+  const handleLogin = async (data: ILogin) => {
+    setLoading(true);
+    await logIn(data);
+    reset();
+    setLoading(false);
   };
+
+  if (twoFactor) return <TwoFactor />;
 
   return (
     <Box className={"login__container"}>
@@ -55,32 +64,44 @@ const LogIn = () => {
           <Box sx={{ boxSizing: "border-box", padding: "1em", width: "100%" }}>
             <form onSubmit={handleSubmit(handleLogin)}>
               <StyledTextField
+                disabled={loading}
                 fullWidth
                 sx={{ marginBottom: "1em" }}
-                placeholder="E-mail"
-                label="E-mail"
-                error={!!errors.email}
+                placeholder="Nombre de usuario"
+                label="Nombre de usuario*"
+                error={!!errors.username}
                 helperText={
-                  errors.email
-                    ? errors.email.message
-                    : "Escibe tu correo electrónico..."
+                  errors.username
+                    ? errors.username.message
+                    : "Escibe tu nombre de usuario..."
                 }
-                {...register("email", {
-                  required: "El correo electrónico es obligatorio",
+                {...register("username", {
+                  required: "El nombre de usuario es obligatorio",
+                  minLength: {
+                    value: 5,
+                    message:
+                      "El nombre de usuario debe tener mínimo 5 caracteres",
+                  },
+                  maxLength: {
+                    value: 8,
+                    message:
+                      "El nombre de usuario debe tener máximo 8 caracteres",
+                  },
                 })}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <EmailIcon />
+                      <AccountBoxIcon />
                     </InputAdornment>
                   ),
                 }}
               />
               <StyledTextField
+                disabled={loading}
                 fullWidth
                 type={showPassword ? "text" : "password"}
-                placeholder="Password"
-                label="Password"
+                placeholder="Contraseña"
+                label="Contraseña*"
                 error={!!errors.password}
                 helperText={
                   errors.password
@@ -114,8 +135,25 @@ const LogIn = () => {
                   ),
                 }}
               />
+              {error && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    color: "error.main",
+                    backgroundColor: "error.light",
+                    p: 1,
+                    borderRadius: 1,
+                    mb: 2,
+                  }}
+                >
+                  <Typography variant="body2" color="error.main">
+                    {message}
+                  </Typography>
+                </Box>
+              )}
               <StyledButton type="submit" variant="contained" fullWidth>
-                Iniciar sesión
+                {loading ? "Comprobando..." : "Iniciar sesión"}
               </StyledButton>
             </form>
           </Box>
@@ -128,14 +166,18 @@ const LogIn = () => {
         }}
       >
         <Typography variant="h4" className="fade-animation">
-          ¡Bienvenido de nuevo!
+          ¡Bienvenid@!
         </Typography>
         <Typography variant="body1" className="fade-animation">
           Para mantenerte en contacto con nosotros, inicia sesión con tus datos
           personales
         </Typography>
         <Link to={"/signup"}>
-          <StyledButton2 variant={"outlined"} className="fade-animation">
+          <StyledButton2
+            variant={"outlined"}
+            className="fade-animation"
+            disabled={loading}
+          >
             <Typography variant="body1">Regístrate</Typography>
           </StyledButton2>
         </Link>

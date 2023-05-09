@@ -7,9 +7,6 @@ import { ISignUp, IPaySignUp } from "../../../interfaces";
 // React Hook Form
 import { useForm } from "react-hook-form";
 
-// React Router DOM
-import { useNavigate } from "react-router-dom";
-
 // Icons
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
@@ -19,7 +16,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import TaskIcon from "@mui/icons-material/Task";
 import CreditScoreIcon from "@mui/icons-material/CreditScore";
 
-// Styled Components
+// Styled Components & Components
 import {
   StyledTextField,
   StyledButton,
@@ -27,7 +24,7 @@ import {
 } from "../../../components";
 
 // React Router DOM
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // Services
 import { SignUp } from "../../../services";

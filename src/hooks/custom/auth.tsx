@@ -1,59 +1,57 @@
 import { useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 // Redux
 import { useAppDispatch } from "../redux";
 import { resetRequest, setRequest } from "../../reducers";
 
 // Services
-// import { logoutService } from "../../services";
+import { logIn } from "../../services";
 
-interface LoginProps {
-  username: string;
-  password: string;
-}
+// Interfaces
+import { ILogin } from "../../interfaces";
 
 /**
  * @description Este hook administra el estado de la autenticación - administra el estado status
- * @returns {boolean} status
+ * @returns { status, LogIn, LogOut, };
  */
 
 const useAuth = () => {
   const [status, setStatus] = useState({
     error: false,
     message: "",
+    twoFactor: false,
   });
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
-  const LogIn = useCallback(
-    async ({ username, password }: LoginProps) => {
-      console.log(username, password);
-      dispatch(
-        setRequest({
-          loading: true,
-          fullscreen: false,
-          action: "Iniciando sesión",
-        })
-      );
-      setStatus({ error: false, message: "" });
+  const LogIn = useCallback(async (loginData: ILogin) => {
+    setStatus({ error: false, message: "", twoFactor: false });
+    const { success, error, message } = await logIn(loginData);
 
-      // const res = await signIn("credentials", {
-      //   username,
-      //   password,
-      //   redirect: false,
-      // });
+    // if (success && user && token) {
+    //   localStorage.setItem("token-parkud", token);
+    //   dispatch(setUser(user));
+    //   return navigate("/home");
+    // }
 
-      // if (res) {
-      //   dispatch(resetRequest());
-      //   if (res.ok) return console.log("reload");
-      //   setStatus({
-      //     error: true,
-      //     message: "Usuario o contraseña incorrectos",
-      //   });
-      // }
-    },
-    [dispatch]
-  );
+    if (success) {
+      setStatus({
+        error: false,
+        message:
+          message ??
+          "Se ha enviado un correo de verificación, por favor revisa tu bandeja de entrada ",
+        twoFactor: true,
+      });
+    }
+
+    setStatus({
+      error: true,
+      message: error ?? "Error al iniciar sesión",
+      twoFactor: false,
+    });
+  }, []);
 
   const LogOut = useCallback(async () => {
     dispatch(
@@ -63,7 +61,7 @@ const useAuth = () => {
         action: "Cerrando sesión",
       })
     );
-    setStatus({ error: false, message: "" });
+    setStatus({ error: false, message: "", twoFactor: false });
 
     try {
       // const res = await logoutService();
@@ -78,8 +76,8 @@ const useAuth = () => {
 
     // await signOut({ redirect: false });
     dispatch(resetRequest());
-    return console.log("reload");
-  }, [dispatch]);
+    return navigate("/");
+  }, [dispatch, navigate]);
 
   return {
     status,

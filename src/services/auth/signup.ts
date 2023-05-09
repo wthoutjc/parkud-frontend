@@ -23,8 +23,6 @@ const SignUp = async (SignUp: ISignUpService): Promise<IResponse> => {
       csv: SignUp.cardCvv,
     };
 
-    console.log(SignUp);
-
     const response = await api.post(
       "/usuario/registro",
       JSON.stringify(signup),
@@ -36,7 +34,6 @@ const SignUp = async (SignUp: ISignUpService): Promise<IResponse> => {
       }
     );
 
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error(error);
