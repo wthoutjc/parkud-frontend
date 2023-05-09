@@ -2,13 +2,13 @@
 import { IRoute } from "../interfaces";
 
 // Components
-import { Layout, Auth } from "../components";
+import { Layout, Auth, LandingPage } from "../components";
 
 const publicRoutes: IRoute[] = [
   {
     path: "/",
     name: "Home",
-    element: <Layout children={<>Home aa </>} />,
+    element: <Layout children={<LandingPage />} />,
     exact: true,
   },
   {
