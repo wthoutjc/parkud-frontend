@@ -57,7 +57,7 @@ const Navbar = () => {
             PAR-KUD
           </Typography>
 
-          <Box
+          {/* <Box
             sx={{
               flexGrow: 1,
               display: {
@@ -76,7 +76,7 @@ const Navbar = () => {
                 {page}
               </Button>
             ))}
-          </Box>
+          </Box> */}
 
           <Box
             sx={{

@@ -5,12 +5,12 @@ import { Box, InputAdornment, Typography } from "@mui/material";
 import EmailIcon from "@mui/icons-material/Email";
 import SwitchAccountIcon from "@mui/icons-material/SwitchAccount";
 import BadgeIcon from "@mui/icons-material/Badge";
-import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
+import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
 
 // React Hook Form
 import { useForm } from "react-hook-form";
 
-// Styled Components
+// Styled Components && Components
 import {
   StyledTextField,
   StyledButton,
@@ -34,13 +34,12 @@ const SignUp = () => {
 
   const [payMethod, setPayMethod] = useState(false);
 
-  const handlePayMethod = async () => {
-    console.log("handleLogin");
-    setPayMethod(true);
-  };
+  const handlePayMethod = async () => setPayMethod(true);
 
   if (payMethod)
-    return <PaySignUp {...watch()} back={() => setPayMethod(false)} />;
+    return (
+      <PaySignUp signUpPrev={{ ...watch() }} back={() => setPayMethod(false)} />
+    );
 
   return (
     <Box className={"signup__container"}>
@@ -136,6 +135,16 @@ const SignUp = () => {
                 }
                 {...register("username", {
                   required: "El nombre de usuario es obligatorio",
+                  minLength: {
+                    value: 5,
+                    message:
+                      "El nombre de usuario debe tener al menos 5 caracteres",
+                  },
+                  maxLength: {
+                    value: 8,
+                    message:
+                      "El nombre de usuario debe tener máximo 8 caracteres",
+                  },
                 })}
                 InputProps={{
                   startAdornment: (

@@ -1,56 +1,104 @@
 import { useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+// uuid
+import { v4 as uuid } from "uuid";
 
 // Redux
 import { useAppDispatch } from "../redux";
-import { resetRequest, setRequest } from "../../reducers";
+import { resetRequest, setRequest, newNotification } from "../../reducers";
 
 // Services
-// import { logoutService } from "../../services";
+import { logIn, twoFactor } from "../../services";
 
-interface LoginProps {
-  username: string;
-  password: string;
-}
+// Interfaces
+import { ILogin, IUser } from "../../interfaces";
 
 /**
  * @description Este hook administra el estado de la autenticación - administra el estado status
- * @returns {boolean} status
+ * @returns { status, LogIn, LogOut, };
  */
 
+interface AuthProps {
+  error: boolean;
+  message: string;
+  twoFactor: boolean;
+  user: IUser | null;
+}
+
 const useAuth = () => {
-  const [status, setStatus] = useState({
+  const [status, setStatus] = useState<AuthProps>({
     error: false,
     message: "",
+    twoFactor: false,
+    user: null,
   });
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
-  const LogIn = useCallback(
-    async ({ username, password }: LoginProps) => {
-      console.log(username, password);
-      dispatch(
-        setRequest({
-          loading: true,
-          fullscreen: false,
-          action: "Iniciando sesión",
-        })
-      );
-      setStatus({ error: false, message: "" });
+  const LogIn = useCallback(async (loginData: ILogin) => {
+    setStatus({ error: false, message: "", twoFactor: false, user: null });
+    const { success, error, message, user } = await logIn(loginData);
 
-      // const res = await signIn("credentials", {
-      //   username,
-      //   password,
-      //   redirect: false,
-      // });
+    if (success && user) {
+      const newUser: IUser = {
+        id: user.idUsuario,
+        name: user.nombre,
+        lastname: user.apellido,
+        email: user.correo,
+        hierarchy: user.rol,
+      };
 
-      // if (res) {
-      //   dispatch(resetRequest());
-      //   if (res.ok) return console.log("reload");
-      //   setStatus({
-      //     error: true,
-      //     message: "Usuario o contraseña incorrectos",
-      //   });
-      // }
+      return setStatus({
+        error: false,
+        message:
+          message ??
+          "Se ha enviado un correo de verificación, por favor revisa tu bandeja de entrada ",
+        twoFactor: true,
+        user: newUser,
+      });
+    }
+
+    setStatus({
+      error: true,
+      message: error ?? "Error al iniciar sesión",
+      twoFactor: false,
+      user: null,
+    });
+  }, []);
+
+  const TwoFactor = useCallback(
+    async (code: string, user: IUser) => {
+      setStatus({ error: false, message: "", twoFactor: false, user });
+      const { success, error, message, token } = await twoFactor(code, user.id);
+
+      if (success && token) {
+        localStorage.setItem("token-parkud", token);
+
+        const notification = {
+          id: uuid(),
+          title: "Inicio de sesión exitoso",
+          message: message ?? "Sesión iniciada correctamente",
+          type: "success" as "success" | "error",
+          autoDismiss: 5000,
+        };
+        dispatch(newNotification(notification));
+
+        return setStatus({
+          error: false,
+          message: message ?? "Sesión iniciada correctamente",
+          twoFactor: false,
+          user,
+        });
+      }
+
+      setStatus({
+        error: true,
+        message: error ?? "Error al iniciar sesión",
+        twoFactor: true,
+        user: null,
+      });
     },
     [dispatch]
   );
@@ -63,7 +111,7 @@ const useAuth = () => {
         action: "Cerrando sesión",
       })
     );
-    setStatus({ error: false, message: "" });
+    setStatus({ error: false, message: "", twoFactor: false, user: null });
 
     try {
       // const res = await logoutService();
@@ -78,13 +126,14 @@ const useAuth = () => {
 
     // await signOut({ redirect: false });
     dispatch(resetRequest());
-    return console.log("reload");
-  }, [dispatch]);
+    return navigate("/");
+  }, [dispatch, navigate]);
 
   return {
     status,
     LogIn,
     LogOut,
+    TwoFactor,
   };
 };
 

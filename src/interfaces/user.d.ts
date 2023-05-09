@@ -3,6 +3,5 @@ export interface IUser {
   name: string;
   lastname: string;
   email: string;
-  hierarchy: "SuperAdmin" | "Admin" | "Operator" | "User" | "";
-  expires: number;
+  hierarchy: string;
 }
