@@ -19,6 +19,7 @@ import {
   StyledButton,
   StyledButton2,
   TwoFactor,
+  UpdatePassword,
 } from "../../../components";
 
 // React Router DOM
@@ -28,8 +29,13 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../../hooks";
 
 const LogIn = () => {
-  const { status, LogIn: logIn, TwoFactor: twoFactorAuth } = useAuth();
-  const { error, message, twoFactor, user } = status;
+  const {
+    status,
+    LogIn: logIn,
+    TwoFactor: twoFactorAuth,
+    UpdatePassword: updatePasswordService,
+  } = useAuth();
+  const { error, message, twoFactor, user, updatePassword } = status;
 
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -47,6 +53,9 @@ const LogIn = () => {
     reset();
     setLoading(false);
   };
+
+  if (updatePassword)
+    return <UpdatePassword updatePassword={updatePasswordService} />;
 
   if (twoFactor && user)
     return <TwoFactor TwoFactor={twoFactorAuth} user={user} />;
