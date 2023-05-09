@@ -1,7 +1,6 @@
 // Interfaces
-import { IUser, IResponse } from "../..";
+import { IResponseUser, IResponse } from "../..";
 
 export interface IResponseLogIn extends IResponse {
-  token?: string;
-  user: IUser | null;
+  user: IResponseUser | null;
 }

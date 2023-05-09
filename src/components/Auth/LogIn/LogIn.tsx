@@ -28,8 +28,8 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../../hooks";
 
 const LogIn = () => {
-  const { status, LogIn: logIn } = useAuth();
-  const { error, message, twoFactor } = status;
+  const { status, LogIn: logIn, TwoFactor: twoFactorAuth } = useAuth();
+  const { error, message, twoFactor, user } = status;
 
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -48,7 +48,8 @@ const LogIn = () => {
     setLoading(false);
   };
 
-  if (twoFactor) return <TwoFactor />;
+  if (twoFactor && user)
+    return <TwoFactor TwoFactor={twoFactorAuth} user={user} />;
 
   return (
     <Box className={"login__container"}>
@@ -68,6 +69,7 @@ const LogIn = () => {
                 fullWidth
                 sx={{ marginBottom: "1em" }}
                 placeholder="Nombre de usuario"
+                autoComplete="parkud-username"
                 label="Nombre de usuario*"
                 error={!!errors.username}
                 helperText={
@@ -102,6 +104,7 @@ const LogIn = () => {
                 type={showPassword ? "text" : "password"}
                 placeholder="Contraseña"
                 label="Contraseña*"
+                autoComplete="parkud-password"
                 error={!!errors.password}
                 helperText={
                   errors.password
@@ -118,7 +121,7 @@ const LogIn = () => {
                       <PasswordIcon />
                     </InputAdornment>
                   ),
-                  endAdornment: (
+                  endAdornment: !loading && (
                     <InputAdornment position="end">
                       {showPassword ? (
                         <VisibilityOffIcon
@@ -152,7 +155,12 @@ const LogIn = () => {
                   </Typography>
                 </Box>
               )}
-              <StyledButton type="submit" variant="contained" fullWidth>
+              <StyledButton
+                type="submit"
+                variant="contained"
+                fullWidth
+                disabled={loading}
+              >
                 {loading ? "Comprobando..." : "Iniciar sesión"}
               </StyledButton>
             </form>

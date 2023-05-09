@@ -1,48 +1,62 @@
 import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+// uuid
+import { v4 as uuid } from "uuid";
+
 // Redux
 import { useAppDispatch } from "../redux";
-import { resetRequest, setRequest } from "../../reducers";
+import { resetRequest, setRequest, newNotification } from "../../reducers";
 
 // Services
-import { logIn } from "../../services";
+import { logIn, twoFactor } from "../../services";
 
 // Interfaces
-import { ILogin } from "../../interfaces";
+import { ILogin, IUser } from "../../interfaces";
 
 /**
  * @description Este hook administra el estado de la autenticación - administra el estado status
  * @returns { status, LogIn, LogOut, };
  */
 
+interface AuthProps {
+  error: boolean;
+  message: string;
+  twoFactor: boolean;
+  user: IUser | null;
+}
+
 const useAuth = () => {
-  const [status, setStatus] = useState({
+  const [status, setStatus] = useState<AuthProps>({
     error: false,
     message: "",
     twoFactor: false,
+    user: null,
   });
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const LogIn = useCallback(async (loginData: ILogin) => {
-    setStatus({ error: false, message: "", twoFactor: false });
-    const { success, error, message } = await logIn(loginData);
+    setStatus({ error: false, message: "", twoFactor: false, user: null });
+    const { success, error, message, user } = await logIn(loginData);
 
-    // if (success && user && token) {
-    //   localStorage.setItem("token-parkud", token);
-    //   dispatch(setUser(user));
-    //   return navigate("/home");
-    // }
+    if (success && user) {
+      const newUser: IUser = {
+        id: user.idUsuario,
+        name: user.nombre,
+        lastname: user.apellido,
+        email: user.correo,
+        hierarchy: user.rol,
+      };
 
-    if (success) {
-      setStatus({
+      return setStatus({
         error: false,
         message:
           message ??
           "Se ha enviado un correo de verificación, por favor revisa tu bandeja de entrada ",
         twoFactor: true,
+        user: newUser,
       });
     }
 
@@ -50,8 +64,44 @@ const useAuth = () => {
       error: true,
       message: error ?? "Error al iniciar sesión",
       twoFactor: false,
+      user: null,
     });
   }, []);
+
+  const TwoFactor = useCallback(
+    async (code: string, user: IUser) => {
+      setStatus({ error: false, message: "", twoFactor: false, user });
+      const { success, error, message, token } = await twoFactor(code, user.id);
+
+      if (success && token) {
+        localStorage.setItem("token-parkud", token);
+
+        const notification = {
+          id: uuid(),
+          title: "Inicio de sesión exitoso",
+          message: message ?? "Sesión iniciada correctamente",
+          type: "success" as "success" | "error",
+          autoDismiss: 5000,
+        };
+        dispatch(newNotification(notification));
+
+        return setStatus({
+          error: false,
+          message: message ?? "Sesión iniciada correctamente",
+          twoFactor: false,
+          user,
+        });
+      }
+
+      setStatus({
+        error: true,
+        message: error ?? "Error al iniciar sesión",
+        twoFactor: true,
+        user: null,
+      });
+    },
+    [dispatch]
+  );
 
   const LogOut = useCallback(async () => {
     dispatch(
@@ -61,7 +111,7 @@ const useAuth = () => {
         action: "Cerrando sesión",
       })
     );
-    setStatus({ error: false, message: "", twoFactor: false });
+    setStatus({ error: false, message: "", twoFactor: false, user: null });
 
     try {
       // const res = await logoutService();
@@ -83,6 +133,7 @@ const useAuth = () => {
     status,
     LogIn,
     LogOut,
+    TwoFactor,
   };
 };
 
