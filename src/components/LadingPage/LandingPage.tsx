@@ -1,6 +1,5 @@
 // Components
-import { Box } from "@mui/material";
-import { Footer } from "../../components";
+import { Box, Button, Typography } from "@mui/material";
 import welcomeImg from "../../styles/img/welcome.png";
 import Circle from "../../styles/img/Circle.png";
 import IC1 from "../../styles/img/IC1.png";
@@ -9,24 +8,34 @@ import IC3 from "../../styles/img/IC3.png";
 import IC4 from "../../styles/img/IC4.png";
 import IC5 from "../../styles/img/IC5.png";
 import IC6 from "../../styles/img/IC6.png";
+import Patterns from "../../styles/img/Patterns.png";
 
 const LandingPage = () => {
   return (
     <>
-      <Box className="welcome">
+      <section id="hero" className="welcome">
         <Box className="Title">
-          <h1>Parquea sin preocupaciones</h1>
-          <p>
+          <Typography variant="h1" fontWeight={700} sx={{ mb: 2 }}>
+            Parquea sin preocupaciones
+          </Typography>
+          <Typography
+            variant="h6"
+            fontWeight={400}
+            color="error.main"
+            sx={{ mb: 2 }}
+          >
             Nuestros parqueaderos te ofrecen la tranquilidad que necesitas en tu
             día a día
-          </p>
-          <button>Agendar</button>
+          </Typography>
+          <Button variant="contained" color="primary" size="large">
+            Agendar
+          </Button>
         </Box>
         <Box className="Carr">
           <img className="circle" src={Circle} alt="Circle Blue" />
           <img className="car" src={welcomeImg} alt="Welcome image" />
         </Box>
-      </Box>
+      </section>
       <Box className="services">
         <Box className="titles">
           <h2>Únete a miles de clientes satisfechos</h2>
@@ -35,7 +44,19 @@ const LandingPage = () => {
             confiable para los conductores en Colombia
           </p>
         </Box>
-        <Box className="clients">
+        <Box
+          className="clients"
+          sx={{
+            overflow: "hidden",
+          }}
+        >
+          <Box
+            sx={{
+              position: "absolute",
+            }}
+          >
+            <img src={Patterns} alt="patterns-parkud" />
+          </Box>
           <div className="percent">
             <h3>100+</h3>
             <p>Ubicaciones</p>
@@ -116,7 +137,6 @@ const LandingPage = () => {
           </div>
         </Box>
       </Box>
-      <Footer />
     </>
   );
 };

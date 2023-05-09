@@ -1,3 +1,5 @@
+import { Box } from "@mui/material";
+
 // Components
 import { Navbar } from "../../../components";
 
@@ -9,7 +11,22 @@ const Layout = ({ children }: Props) => {
   return (
     <>
       <Navbar />
-      {children}
+      <Box
+        sx={{
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <Box
+          sx={{
+            maxWidth: "1655px",
+          }}
+        >
+          {children}
+        </Box>
+      </Box>
     </>
   );
 };
