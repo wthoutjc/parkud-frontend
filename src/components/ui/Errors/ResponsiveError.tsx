@@ -40,7 +40,7 @@ const ResponsiveError = () => {
         fontWeight={400}
         color="text.secondary"
       >
-        Por favor, utiliza un dispositivo con una resolución mayor a 1500px
+        Por favor, utiliza un dispositivo con una resolución mayor a 1250px
       </Typography>
     </Box>
   );

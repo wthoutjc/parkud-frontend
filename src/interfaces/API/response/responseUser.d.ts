@@ -6,5 +6,5 @@ export interface IResponseUser extends IResponse {
   nombre: string;
   apellido: string;
   correo: string;
-  rol: string;
+  rol: "C" | "S" | "A" | "O";
 }

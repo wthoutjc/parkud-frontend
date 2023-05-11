@@ -22,12 +22,12 @@ const AuthRouter = () => {
 
   useEffect(() => {
     addEventListener("resize", () => {
-      setResponsiveError(window.innerWidth <= 1500 ? true : false);
+      setResponsiveError(window.innerWidth <= 1250 ? true : false);
     });
 
     return () => {
       removeEventListener("resize", () => {
-        setResponsiveError(window.innerWidth <= 1500 ? true : false);
+        setResponsiveError(window.innerWidth <= 1250 ? true : false);
       });
     };
   }, []);

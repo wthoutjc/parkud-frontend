@@ -170,8 +170,9 @@ const useAuth = () => {
         email: user.correo,
         hierarchy: user.rol,
       };
-      dispatch(setUser(newUser));
+      return dispatch(setUser(newUser));
     }
+
     if (!success) {
       const notification = {
         id: uuid(),
@@ -184,6 +185,13 @@ const useAuth = () => {
       dispatch(logout());
       localStorage.removeItem("token-parkud");
     }
+
+    return dispatch(
+      setRequest({
+        loading: false,
+        message: "",
+      })
+    );
   }, [dispatch]);
 
   const LogOut = useCallback(async () => {

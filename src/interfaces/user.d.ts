@@ -3,5 +3,5 @@ export interface IUser {
   name: string;
   lastname: string;
   email: string;
-  hierarchy: string;
+  hierarchy: "C" | "S" | "A" | "O";
 }
