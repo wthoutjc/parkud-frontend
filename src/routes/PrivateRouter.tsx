@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Outlet, Navigate } from "react-router-dom";
 
 // Auth
@@ -11,17 +11,26 @@ import { logout } from "../reducers";
 const PrivateRouter = () => {
   const dispatch = useAppDispatch();
 
+  const [redirect, setRedirect] = useState(false);
+
   const { logged } = useAppSelector((state) => state.auth);
   const { GetUser } = useAuth();
+
+  const { request } = useAppSelector((state) => state.ui);
+  const { loading } = request;
 
   useEffect(() => {
     const token = localStorage.getItem("token-parkud");
 
-    if (!token) dispatch(logout());
-    else if (!logged && token) GetUser();
-  }, [dispatch, GetUser, logged]);
+    if (!token) {
+      dispatch(logout());
+      return;
+    }
 
-  return logged ? <Outlet /> : <Navigate to="/login" />;
+    if (!logged && token && !loading) GetUser().then(() => setRedirect(true));
+  }, [dispatch, GetUser, logged, loading]);
+
+  return logged ? <Outlet /> : redirect && <Navigate to="/login" />;
 };
 
 export { PrivateRouter };

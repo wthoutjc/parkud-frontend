@@ -77,9 +77,9 @@ const Navbar = () => {
             }}
           >
             {[
-              { name: "Servicios", to: "#servicios" },
-              { name: "Características", to: "#caracteristicas" },
-              { name: "Contáctenos", to: "#contactenos" },
+              { name: "Servicios", to: "/#servicios" },
+              { name: "Características", to: "/#caracteristicas" },
+              { name: "Contáctenos", to: "/#contactenos" },
             ].map(({ name, to }) => (
               <Link
                 key={to}

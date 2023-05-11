@@ -111,7 +111,7 @@ const updatePassword = async (password: string): Promise<IResponse> => {
 
 const getUser = async (): Promise<IResponseLogIn> => {
   try {
-    const response = await api.get(`/usuario`, {
+    const response = await api.get(`/usuario/obtener_usuario`, {
       headers: {
         Authorization: `${localStorage.getItem("token-parkud")}`,
       },

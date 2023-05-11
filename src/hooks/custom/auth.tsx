@@ -162,6 +162,7 @@ const useAuth = () => {
     );
 
     const { success, user, error, message } = await getUser();
+
     if (success && user) {
       const newUser: IUser = {
         id: user.idUsuario,
@@ -170,7 +171,15 @@ const useAuth = () => {
         email: user.correo,
         hierarchy: user.rol,
       };
-      return dispatch(setUser(newUser));
+
+      dispatch(login());
+      dispatch(setUser(newUser));
+      return dispatch(
+        setRequest({
+          loading: false,
+          message: "",
+        })
+      );
     }
 
     if (!success) {
@@ -184,14 +193,14 @@ const useAuth = () => {
       dispatch(newNotification(notification));
       dispatch(logout());
       localStorage.removeItem("token-parkud");
-    }
 
-    return dispatch(
-      setRequest({
-        loading: false,
-        message: "",
-      })
-    );
+      return dispatch(
+        setRequest({
+          loading: false,
+          message: "",
+        })
+      );
+    }
   }, [dispatch]);
 
   const LogOut = useCallback(async () => {
