@@ -1,28 +1,32 @@
 import { useState } from "react";
 import {
-  ListItemText,
   ListItemButton,
   ListItem,
   IconButton,
   List,
   Box,
   Tooltip,
-  Typography
+  Typography,
 } from "@mui/material";
 
 // Icons
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ListItemIcon from "@mui/material/ListItemIcon";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 // StyledComponents
 import { StyledDrawer, StyledDrawerHeader } from "../../../components";
 
+// Redux
+import { useAppSelector } from "../../../hooks";
+import SidebarList from "./SidebarList";
+
 export function Sidebar() {
+  const { user } = useAppSelector((state) => state.auth);
+  const { hierarchy } = user;
+
   const [open, setOpen] = useState(false);
 
   const handleDrawerOpen = () => {
@@ -109,39 +113,20 @@ export function Sidebar() {
                   >
                     {icon}
                   </ListItemIcon>
-                  <ListItemText
-                    primary={message}
-                    sx={{ opacity: open ? 1 : 0 }}
-                  />
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      display: open ? "block" : "none",
+                    }}
+                  >
+                    {message}
+                  </Typography>
                 </ListItemButton>
               </Tooltip>
             </ListItem>
           ))}
         </List>
-        <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
+        <SidebarList hierarchy={hierarchy} open={open} />
       </StyledDrawer>
     </Box>
   );
