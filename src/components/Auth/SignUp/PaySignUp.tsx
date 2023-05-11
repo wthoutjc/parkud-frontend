@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Typography, InputAdornment, MenuItem } from "@mui/material";
+import { Box, Typography, InputAdornment } from "@mui/material";
 
 // Interfaces
 import { ISignUp, IPaySignUp } from "../../../interfaces";
@@ -13,7 +13,6 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import TaskIcon from "@mui/icons-material/Task";
 import CreditScoreIcon from "@mui/icons-material/CreditScore";
 
 // Styled Components & Components
@@ -51,12 +50,11 @@ const PaySignUp = ({ back, signUpPrev }: Props) => {
   const {
     register,
     handleSubmit,
-    watch,
     reset,
     formState: { errors },
   } = useForm<IPaySignUp>({
     defaultValues: {
-      cardType: "Seleccionar",
+      cardType: "C",
     },
   });
 
@@ -96,70 +94,41 @@ const PaySignUp = ({ back, signUpPrev }: Props) => {
         <Box display={"flex"}>
           <Box sx={{ boxSizing: "border-box", padding: "1em", width: "100%" }}>
             <form onSubmit={handleSubmit(handleSignup)}>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
+              <StyledTextField
+                disabled={loading}
+                fullWidth
+                type="text"
+                placeholder="Ej 123456789"
+                label="Cédula*"
+                error={!!errors.idNumber}
+                helperText={
+                  errors.idNumber
+                    ? errors.idNumber.message
+                    : "Escibe tu número de cédula..."
+                }
+                {...register("idNumber", {
+                  required: "El número de cédula es obligatorio",
+                  validate: (value) =>
+                    value.trim() !== "" ||
+                    "El nombre en la tarjeta es obligatorio",
+                })}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <AccountCircleIcon />
+                    </InputAdornment>
+                  ),
                 }}
+              />
+              <Typography
+                variant="body2"
+                color="secondary"
+                fontWeight={500}
+                sx={{ mb: 2, mt: 1 }}
               >
-                <StyledTextField
-                  select
-                  disabled={loading}
-                  label="Tipo de tarjeta*"
-                  error={!!errors.cardType}
-                  sx={{ mb: 2, mr: 2, width: "40%" }}
-                  helperText={
-                    errors.cardType
-                      ? errors.cardType.message
-                      : "Selecciona el tipo de tarjeta..."
-                  }
-                  {...register("cardType", {
-                    required: "El tipo de archivo es requerido",
-                    validate: (value) =>
-                      value !== "Seleccionar" ||
-                      "Selecciona un tipo de tarjeta",
-                  })}
-                  value={watch("cardType")}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <TaskIcon />
-                      </InputAdornment>
-                    ),
-                  }}
-                >
-                  <MenuItem value={"Seleccionar"}>Seleccionar</MenuItem>
-                  <MenuItem value={"C"}>Crédito</MenuItem>
-                  <MenuItem value={"D"}>Débito</MenuItem>
-                </StyledTextField>
-                <StyledTextField
-                  disabled={loading}
-                  fullWidth
-                  type="text"
-                  sx={{ marginBottom: "1em", width: "60%" }}
-                  placeholder="Ej 123456789"
-                  label="Cédula*"
-                  error={!!errors.idNumber}
-                  helperText={
-                    errors.idNumber
-                      ? errors.idNumber.message
-                      : "Escibe tu número de cédula..."
-                  }
-                  {...register("idNumber", {
-                    required: "El número de cédula es obligatorio",
-                    validate: (value) =>
-                      value.trim() !== "" ||
-                      "El nombre en la tarjeta es obligatorio",
-                  })}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <AccountCircleIcon />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </Box>
+                <strong>Nota:</strong>{" "}
+                <i>Solo se aceptan tarjetas de crédito</i>
+              </Typography>
               <StyledTextField
                 disabled={loading}
                 fullWidth
@@ -258,6 +227,7 @@ const PaySignUp = ({ back, signUpPrev }: Props) => {
                   sx={{ marginBottom: "1em", ml: 2 }}
                   placeholder="CVV"
                   label="CVV*"
+                  autoComplete="off"
                   error={!!errors.cardCvv}
                   helperText={
                     errors.cardCvv

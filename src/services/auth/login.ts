@@ -109,4 +109,33 @@ const updatePassword = async (password: string): Promise<IResponse> => {
   }
 };
 
-export { logIn, twoFactor, updatePassword };
+const getUser = async (): Promise<IResponseLogIn> => {
+  try {
+    const response = await api.get(`/usuario`, {
+      headers: {
+        Authorization: `${localStorage.getItem("token-parkud")}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    const errorReturn = {
+      success: false,
+      user: null,
+    };
+
+    if (axios.isAxiosError(error)) {
+      return {
+        ...errorReturn,
+        error: error.response?.data.error || "Falló la solicitud al servidor",
+      };
+    }
+
+    return {
+      ...errorReturn,
+      error: "Falló la solicitud al servidor",
+    };
+  }
+};
+
+export { logIn, twoFactor, updatePassword, getUser };

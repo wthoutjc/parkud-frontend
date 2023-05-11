@@ -12,20 +12,8 @@ import { store } from "./store";
 // Components
 import { Notifications } from "./components";
 
-// React Router DOM
-import { publicRoutes } from "./routes";
-import {
-  RouterProvider,
-  createBrowserRouter,
-  createRoutesFromElements,
-  Route,
-} from "react-router-dom";
-
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    publicRoutes.map((route, index) => <Route key={index} {...route} />)
-  )
-);
+// Router
+import { AuthRouter } from "./routes";
 
 function App() {
   return (
@@ -34,7 +22,7 @@ function App() {
       <Provider store={store}>
         <CssBaseline />
         <Notifications />
-        <RouterProvider router={router} />
+        <AuthRouter />
       </Provider>
     </ThemeProvider>
   );

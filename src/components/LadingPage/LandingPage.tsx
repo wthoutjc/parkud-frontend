@@ -67,7 +67,6 @@ const LandingPage = () => {
             <Typography variant="h3">100+</Typography>
             <p>Ubicaciones</p>
           </div>
-          a
           <Divider orientation="vertical" variant="middle" flexItem />
           <div className="percent">
             <h3>24/7</h3>

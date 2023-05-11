@@ -6,10 +6,17 @@ import { v4 as uuid } from "uuid";
 
 // Redux
 import { useAppDispatch } from "../redux";
-import { resetRequest, setRequest, newNotification } from "../../reducers";
+import {
+  resetRequest,
+  setRequest,
+  newNotification,
+  login,
+  logout,
+  setUser,
+} from "../../reducers";
 
 // Services
-import { logIn, twoFactor, updatePassword } from "../../services";
+import { logIn, twoFactor, updatePassword, getUser } from "../../services";
 
 // Interfaces
 import { ILogin, IUser } from "../../interfaces";
@@ -46,6 +53,16 @@ const useAuth = () => {
     });
   };
 
+  const setError = (message: string) => {
+    setStatus({
+      twoFactor: false,
+      user: null,
+      updatePassword: 0,
+      error: true,
+      message,
+    });
+  };
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -73,13 +90,7 @@ const useAuth = () => {
       });
     }
 
-    setStatus({
-      error: true,
-      message: error ?? "Error al iniciar sesión",
-      twoFactor: false,
-      user: null,
-      updatePassword: 0,
-    });
+    setError(error ?? "Error al iniciar sesión");
   }, []);
 
   const TwoFactor = useCallback(
@@ -98,24 +109,21 @@ const useAuth = () => {
           type: "success" as "success" | "error",
           autoDismiss: 5000,
         };
-        dispatch(newNotification(notification));
 
-        return setStatus({
+        dispatch(newNotification(notification));
+        dispatch(setUser(user));
+        setStatus({
           error: false,
           message: message ?? "Sesión iniciada correctamente",
           twoFactor: false,
           user,
           updatePassword: cambiarContrasena,
         });
+
+        return dispatch(login());
       }
 
-      setStatus({
-        error: true,
-        message: error ?? "Error al iniciar sesión",
-        twoFactor: true,
-        user: null,
-        updatePassword: 0,
-      });
+      setError(error ?? "Error al iniciar sesión");
     },
     [dispatch]
   );
@@ -144,6 +152,32 @@ const useAuth = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [dispatch]
   );
+
+  const GetUser = useCallback(async () => {
+    const { success, user, error, message } = await getUser();
+    if (success && user) {
+      const newUser: IUser = {
+        id: user.idUsuario,
+        name: user.nombre,
+        lastname: user.apellido,
+        email: user.correo,
+        hierarchy: user.rol,
+      };
+      dispatch(setUser(newUser));
+    }
+    if (!success) {
+      const notification = {
+        id: uuid(),
+        title: "Error al obtener usuario",
+        message: message ?? error ?? "Error al obtener usuario",
+        type: "error" as "success" | "error",
+        autoDismiss: 5000,
+      };
+      dispatch(newNotification(notification));
+      dispatch(logout());
+      localStorage.removeItem("token-parkud");
+    }
+  }, [dispatch]);
 
   const LogOut = useCallback(async () => {
     dispatch(
@@ -177,6 +211,7 @@ const useAuth = () => {
     LogOut,
     TwoFactor,
     UpdatePassword,
+    GetUser,
   };
 };
 
