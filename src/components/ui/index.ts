@@ -5,3 +5,4 @@ export * from "./StyledComponents";
 export * from "./Footer";
 export * from "./Sidebar";
 export * from "./Loaders";
+export * from "./Errors";

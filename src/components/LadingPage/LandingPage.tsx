@@ -1,5 +1,9 @@
+import { Link } from "react-router-dom";
+
 // Components
 import { Box, Button, Typography, Divider } from "@mui/material";
+
+// Images
 import welcomeImg from "../../styles/img/welcome.png";
 import Circle from "../../styles/img/Circle.png";
 import IC1 from "../../styles/img/IC1.png";
@@ -46,19 +50,21 @@ const LandingPage = () => {
             Nuestros parqueaderos te ofrecen la tranquilidad que necesitas en tu
             día a día
           </Typography>
-          <Button
-            variant="contained"
-            color="primary"
-            size="large"
-            sx={{
-              backgroundColor: "primary.dark",
-              "&:hover": {
-                backgroundColor: "primary.main",
-              },
-            }}
-          >
-            Agendar
-          </Button>
+          <Link to="/login">
+            <Button
+              variant="contained"
+              color="primary"
+              size="large"
+              sx={{
+                backgroundColor: "primary.dark",
+                "&:hover": {
+                  backgroundColor: "primary.main",
+                },
+              }}
+            >
+              Agendar
+            </Button>
+          </Link>
         </Box>
         <img className="car" src={welcomeImg} alt="Welcome image" />
       </section>

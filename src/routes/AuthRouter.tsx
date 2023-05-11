@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 // Router
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import {
@@ -11,11 +12,27 @@ import {
 import { useAppSelector } from "../hooks";
 
 // Components
-import { FullScreenLoader } from "../components";
+import { FullScreenLoader, ResponsiveError } from "../components";
 
 const AuthRouter = () => {
+  const [responsiveError, setResponsiveError] = useState(false);
+
   const { request } = useAppSelector((state) => state.ui);
   const { message, loading } = request;
+
+  useEffect(() => {
+    addEventListener("resize", () => {
+      setResponsiveError(window.innerWidth <= 1500 ? true : false);
+    });
+
+    return () => {
+      removeEventListener("resize", () => {
+        setResponsiveError(window.innerWidth <= 1500 ? true : false);
+      });
+    };
+  }, []);
+
+  if (responsiveError) return <ResponsiveError />;
 
   return (
     <>
