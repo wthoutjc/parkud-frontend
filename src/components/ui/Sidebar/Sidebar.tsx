@@ -16,7 +16,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
-import SupportAgentIcon from "@mui/icons-material/SupportAgent";
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import LogoutIcon from "@mui/icons-material/Logout";
 
 // StyledComponents
@@ -84,7 +84,7 @@ export function Sidebar() {
         </StyledDrawerHeader>
         <List>
           {[
-            { message: "Soporte", icon: <SupportAgentIcon /> },
+            { message: "Cuenta", icon: <AccountBoxIcon /> },
             { message: "Cerrar sesión", icon: <LogoutIcon /> },
           ].map(({ icon, message }, index) => (
             <ListItem key={index} disablePadding sx={{ display: "block" }}>

@@ -42,6 +42,9 @@ const StyledDrawer = styled(Drawer, {
   flexShrink: 0,
   whiteSpace: "nowrap",
   boxSizing: "border-box",
+  "& .MuiPaper-elevation": {
+    borderColor: theme.palette.secondary.light,
+  },
   ...(open && {
     ...openedMixin(theme),
     "& .MuiDrawer-paper": openedMixin(theme),
