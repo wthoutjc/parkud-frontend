@@ -25,10 +25,11 @@ const StyledButton = styled(Button)<ButtonProps>(({ theme }) => ({
 const Navbar = () => {
   return (
     <AppBar
-      position="static"
+      position="sticky"
       sx={{
         backgroundColor: "background.default",
         color: "text.primary",
+        top: 0,
       }}
     >
       <Container maxWidth="xl">
@@ -39,25 +40,35 @@ const Navbar = () => {
             justifyContent: "space-between",
           }}
         >
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".1rem",
-              color: "inherit",
+          <Link
+            to="/#bienvenido"
+            style={{
               textDecoration: "none",
             }}
+            onClick={() => {
+              const anchor = document.querySelector("/#bienvenido");
+              anchor?.scrollIntoView({ behavior: "smooth" });
+            }}
           >
-            PAR-KUD
-          </Typography>
+            <Typography
+              variant="h6"
+              noWrap
+              component="a"
+              sx={{
+                mr: 2,
+                display: { xs: "none", md: "flex" },
+                fontFamily: "monospace",
+                fontWeight: 700,
+                letterSpacing: ".1rem",
+                textDecoration: "none",
+              }}
+              color="text.primary"
+            >
+              PAR-KUD
+            </Typography>
+          </Link>
 
-          {/* <Box
+          <Box
             sx={{
               flexGrow: 1,
               display: {
@@ -67,16 +78,29 @@ const Navbar = () => {
               },
             }}
           >
-            {["Option 1", "Option 2", "Option 3"].map((page) => (
-              <Button
-                key={page}
-                variant="contained"
-                sx={{ my: 2, display: "block" }}
+            {[
+              { name: "Servicios", to: "#servicios" },
+              { name: "Características", to: "#caracteristicas" },
+              { name: "Contáctenos", to: "#contactenos" },
+            ].map(({ name, to }) => (
+              <Link
+                key={to}
+                to={to}
+                onClick={() => {
+                  const anchor = document.querySelector(to);
+                  anchor?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                  });
+                }}
+                style={{
+                  textDecoration: "none",
+                }}
               >
-                {page}
-              </Button>
+                <Button sx={{ my: 2, display: "block" }}>{name}</Button>
+              </Link>
             ))}
-          </Box> */}
+          </Box>
 
           <Box
             sx={{
@@ -110,7 +134,15 @@ const Navbar = () => {
             >
               <Button
                 variant="contained"
-                sx={{ my: 2, display: "block", ml: 2 }}
+                sx={{
+                  my: 2,
+                  display: "block",
+                  ml: 2,
+                  backgroundColor: "primary.dark",
+                  "&:hover": {
+                    backgroundColor: "primary.main",
+                  },
+                }}
               >
                 Regístrate
               </Button>

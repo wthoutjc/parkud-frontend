@@ -19,7 +19,16 @@ interface ITwoFactor {
 
 interface Props {
   user: IUser;
-  TwoFactor: (token: string, user: IUser) => Promise<void>;
+  TwoFactor: (
+    code: string,
+    user: IUser
+  ) => Promise<
+    | {
+        payload: undefined;
+        type: "[AUTH]/login";
+      }
+    | undefined
+  >;
 }
 
 const TwoFactor = ({ user, TwoFactor: twoFactor }: Props) => {

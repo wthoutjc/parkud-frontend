@@ -13,7 +13,26 @@ import Patterns from "../../styles/img/Patterns.png";
 const LandingPage = () => {
   return (
     <>
-      <section id="hero" className="welcome">
+      <section id="bienvenido" className="welcome">
+        <Box
+          sx={{
+            width: "100%",
+            height: "100%",
+            zIndex: -1,
+          }}
+          position={"absolute"}
+        >
+          <Box
+            position={"absolute"}
+            sx={{
+              right: 0,
+              top: 260,
+              overflow: "hidden",
+            }}
+          >
+            <img className="circle" src={Circle} alt="Circle Blue" />
+          </Box>
+        </Box>
         <Box className="Title">
           <Typography variant="h1" fontWeight={700} sx={{ mb: 2 }}>
             Parquea sin preocupaciones
@@ -27,17 +46,25 @@ const LandingPage = () => {
             Nuestros parqueaderos te ofrecen la tranquilidad que necesitas en tu
             día a día
           </Typography>
-          <Button variant="contained" color="primary" size="large">
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            sx={{
+              backgroundColor: "primary.dark",
+              "&:hover": {
+                backgroundColor: "primary.main",
+              },
+            }}
+          >
             Agendar
           </Button>
         </Box>
-        <Box className="Carr">
-          <img className="circle" src={Circle} alt="Circle Blue" />
-          <img className="car" src={welcomeImg} alt="Welcome image" />
-        </Box>
+        <img className="car" src={welcomeImg} alt="Welcome image" />
       </section>
       <Box
         className="services"
+        id="servicios"
         sx={{
           backgroundColor: "primary.dark",
           color: "primary.contrastText",
@@ -59,6 +86,9 @@ const LandingPage = () => {
           <Box
             sx={{
               position: "absolute",
+              width: "100%",
+              overflow: "hidden",
+              zIndex: 1,
             }}
           >
             <img src={Patterns} alt="patterns-parkud" />
@@ -67,24 +97,45 @@ const LandingPage = () => {
             <Typography variant="h3">100+</Typography>
             <p>Ubicaciones</p>
           </div>
-          <Divider orientation="vertical" variant="middle" flexItem />
+          <Divider
+            orientation="vertical"
+            variant="middle"
+            flexItem
+            sx={{
+              borderColor: "primary.contrastText",
+            }}
+          />
           <div className="percent">
             <h3>24/7</h3>
             <p>Para hospitales</p>
           </div>
-          <Divider orientation="vertical" variant="middle" flexItem />
+          <Divider
+            orientation="vertical"
+            variant="middle"
+            flexItem
+            sx={{
+              borderColor: "primary.contrastText",
+            }}
+          />
           <div className="percent">
             <h3>95%</h3>
             <p>Satisfacción</p>
           </div>
-          <Divider orientation="vertical" variant="middle" flexItem />
+          <Divider
+            orientation="vertical"
+            variant="middle"
+            flexItem
+            sx={{
+              borderColor: "primary.contrastText",
+            }}
+          />
           <div className="percent">
             <h3>50.000+</h3>
             <p>Conductores registrados</p>
           </div>
         </Box>
       </Box>
-      <Box className="characteristic">
+      <section className="characteristic" id="caracteristicas">
         <Box className="title">
           <h2>Características a medida</h2>
           <p>
@@ -145,7 +196,8 @@ const LandingPage = () => {
             </p>
           </div>
         </Box>
-      </Box>
+      </section>
+      {/* TODO: Footer */}
     </>
   );
 };
