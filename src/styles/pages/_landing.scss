@@ -72,6 +72,10 @@
 .characteristic {
   display: flex;
   flex-direction: column;
+  padding: 1em;
+  position: relative;
+  z-index: 1;
+
   .title {
     text-align: center;
 
@@ -91,9 +95,11 @@
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 10px;
     grid-auto-rows: minmax(100px, auto);
-    padding: 30px;
     align-items: flex-start;
+    padding: 3em;
     .item {
+      padding: 1em;
+      margin: 1em;
       display: flex;
       justify-content: center;
       align-items: center;

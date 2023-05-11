@@ -26,7 +26,7 @@ const LandingPage = () => {
             position={"absolute"}
             sx={{
               right: 0,
-              top: 260,
+              top: -210,
               overflow: "hidden",
             }}
           >
@@ -68,6 +68,7 @@ const LandingPage = () => {
         sx={{
           backgroundColor: "primary.dark",
           color: "primary.contrastText",
+          p: 3,
         }}
       >
         <Box className="titles">
@@ -143,7 +144,12 @@ const LandingPage = () => {
             inteligente
           </p>
         </Box>
-        <Box className="items">
+        <Box
+          className="items"
+          sx={{
+            p: 2,
+          }}
+        >
           <div className="item">
             <img className="IC" src={IC1} alt="ic1" />
             <h4>Autenticación segura</h4>
