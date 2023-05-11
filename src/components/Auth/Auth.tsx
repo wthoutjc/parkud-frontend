@@ -19,7 +19,7 @@ const Auth = ({ type }: Props) => {
     >
       <Box
         sx={{
-          width: "70%",
+          width: "80%",
           height: "80%",
           display: "flex",
           justifyContent: "center",
