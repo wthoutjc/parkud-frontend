@@ -8,8 +8,7 @@ const initialState: UI = {
   notifications: [],
   request: {
     loading: false,
-    fullscreen: false,
-    action: null,
+    message: "",
   },
   openSidebar: false,
   isMobile: false,
@@ -31,8 +30,7 @@ interface RemoveNotification {
 interface RequestAction {
   payload: {
     loading: boolean;
-    fullscreen: boolean;
-    action: string | null;
+    message: string;
   };
 }
 
@@ -54,8 +52,7 @@ const uiSlice = createSlice({
     resetRequest: (state: UI) => {
       state.request = {
         loading: false,
-        fullscreen: false,
-        action: null,
+        message: "",
       };
     },
     setOpenSidebar: (state: UI, action: { payload: boolean }) => {

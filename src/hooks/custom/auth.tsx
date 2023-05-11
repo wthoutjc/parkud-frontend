@@ -154,6 +154,13 @@ const useAuth = () => {
   );
 
   const GetUser = useCallback(async () => {
+    dispatch(
+      setRequest({
+        loading: true,
+        message: "Cargando usuario",
+      })
+    );
+
     const { success, user, error, message } = await getUser();
     if (success && user) {
       const newUser: IUser = {
@@ -183,8 +190,7 @@ const useAuth = () => {
     dispatch(
       setRequest({
         loading: true,
-        fullscreen: true,
-        action: "Cerrando sesión",
+        message: "Cerrando sesión",
       })
     );
     resetRequest();

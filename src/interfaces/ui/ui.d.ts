@@ -13,8 +13,7 @@ interface UI {
   notifications: INotification[];
   request: {
     loading: boolean;
-    fullscreen: boolean;
-    action: string | null;
+    message: string;
   };
   openSidebar: boolean;
   isMobile: boolean;
