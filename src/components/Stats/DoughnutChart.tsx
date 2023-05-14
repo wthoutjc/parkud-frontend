@@ -18,7 +18,7 @@ const DATA = {
   ],
 };
 
-const PieChart = () => {
+const DoughnutChart = () => {
   return (
     <Box
       sx={{
@@ -124,4 +124,4 @@ const PieChart = () => {
   );
 };
 
-export { PieChart };
+export { DoughnutChart };
