@@ -1,6 +1,13 @@
+import { useState } from "react";
+import { Box, Avatar } from "@mui/material";
 // Components
-import { Box } from "@mui/material";
-import { Table, DoughnutChart, Stat } from "../../components";
+import {
+  Table,
+  DoughnutChart,
+  Stat,
+  LineChart,
+  UserChart,
+} from "../../components";
 
 const data = [
   {
@@ -33,23 +40,53 @@ const data = [
   },
 ];
 
+const LINE_DATA = [
+  {
+    percentValue: 60,
+    value: 120,
+    name: "Parqueadero 1",
+  },
+  {
+    percentValue: 30,
+    value: 50,
+    name: "Parqueadero 2",
+  },
+  {
+    percentValue: 90,
+    value: 190,
+    name: "Parqueadero 3",
+  },
+];
+
 const Client = () => {
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(20);
+
   return (
     <div>
-      Soy Admin
+      Soy Client
       <Box sx={{ mb: 2, display: "flex" }}>
         <Stat title="Doughnut Chart" description="This is a doughnut chart">
           <DoughnutChart />
         </Stat>
-        <Stat title="Doughnut Chart" description="This is a doughnut chart">
-          <DoughnutChart />
+        <Stat title="Line Chart" description="This is a line chart">
+          <LineChart data={LINE_DATA} />
         </Stat>
-        <Stat title="Doughnut Chart" description="This is a doughnut chart">
-          <DoughnutChart />
+        <Stat
+          title="Doughnut Chart"
+          description="This is a doughnut chart"
+          avatar={<Avatar>H</Avatar>}
+        >
+          <UserChart value={100} value2={200} />
         </Stat>
       </Box>
       <Table
         to="xd"
+        setPage={setPage}
+        setLimit={setLimit}
+        page={page}
+        limit={limit}
+        totalData={1000}
         loading={false}
         title="Clientes"
         context={{
@@ -57,7 +94,7 @@ const Client = () => {
             enabled: false,
           },
           read: {
-            enabled: false,
+            enabled: true,
           },
           update: {
             enabled: false,

@@ -49,7 +49,12 @@ const UpdatePassword = ({ updatePassword }: Props) => {
         }}
       >
         <Typography variant="h4">Actualizar contraseña</Typography>
-        <Box display={"flex"}>
+        <Box
+          display={"flex"}
+          sx={{
+            width: "100%",
+          }}
+        >
           <Box sx={{ boxSizing: "border-box", padding: "1em", width: "100%" }}>
             <form onSubmit={handleSubmit(handleUpdatePassword)}>
               <StyledTextField

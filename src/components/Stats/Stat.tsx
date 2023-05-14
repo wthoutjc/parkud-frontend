@@ -59,14 +59,16 @@ const Stat = ({ title, description, children, avatar }: Props) => {
               </Typography>
               <Typography variant="body2">{description}</Typography>
             </Box>
-            <IconButton
-              aria-label="settings"
-              sx={{
-                display: "flex",
-              }}
-            >
-              <MoreVertIcon />
-            </IconButton>
+            <Box sx={{ mr: 2 }}>
+              <IconButton
+                aria-label="settings"
+                sx={{
+                  display: "flex",
+                }}
+              >
+                <MoreVertIcon />
+              </IconButton>
+            </Box>
           </CardContent>
         </Box>
       ) : (
@@ -87,14 +89,16 @@ const Stat = ({ title, description, children, avatar }: Props) => {
             </Typography>
             <Typography variant="body2">{description}</Typography>
           </Box>
-          <IconButton
-            aria-label="settings"
-            sx={{
-              display: "flex",
-            }}
-          >
-            <MoreVertIcon />
-          </IconButton>
+          <Box sx={{ mr: 0.2 }}>
+            <IconButton
+              aria-label="settings"
+              sx={{
+                display: "flex",
+              }}
+            >
+              <MoreVertIcon />
+            </IconButton>
+          </Box>
         </CardContent>
       )}
 
