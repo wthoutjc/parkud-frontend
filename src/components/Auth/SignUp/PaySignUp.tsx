@@ -29,7 +29,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { SignUp } from "../../../services";
 
 // uuid
-import { v5 as uuid } from "uuid";
+import { v4 as uuid } from "uuid";
 
 // Redux
 import { useAppDispatch } from "../../../hooks";
@@ -68,7 +68,7 @@ const PaySignUp = ({ back, signUpPrev }: Props) => {
       ...data,
     });
     const notification = {
-      id: uuid({ length: 4 }, Math.random().toString()),
+      id: uuid(),
       title: success ? "Registro exitoso" : "Error al registrarse",
       message: success
         ? message ?? "Usuario registrado correctamente"
