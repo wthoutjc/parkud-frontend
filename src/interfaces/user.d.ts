@@ -1,4 +1,4 @@
-export type Hierarchy = "C" | "S" | "A" | "O";
+export type Hierarchy = "C" | "S" | "A" | "O" | "";
 
 export interface IUser {
   id: number;

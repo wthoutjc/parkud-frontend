@@ -18,6 +18,7 @@ const Home = () => {
   else if (hierarchy === "C") return <HomeLayout children={<Client />} />;
   else if (hierarchy === "O") return <HomeLayout children={<Operator />} />;
   else if (hierarchy === "S") return <HomeLayout children={<SuperAdmin />} />;
+  else return <HomeLayout children={<Client />} />;
 };
 
 export { Home };
