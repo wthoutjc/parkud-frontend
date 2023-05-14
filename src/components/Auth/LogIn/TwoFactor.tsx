@@ -13,6 +13,9 @@ import KeyIcon from "@mui/icons-material/Key";
 // Interfaces
 import { IUser } from "../../../interfaces";
 
+// Images
+import logo from "../../../styles/img/logo.png";
+
 interface ITwoFactor {
   token: string;
 }
@@ -101,6 +104,21 @@ const TwoFactor = ({ user, TwoFactor: twoFactor }: Props) => {
           backgroundColor: "primary.light",
         }}
       >
+        <Box
+          sx={{
+            width: "100px",
+            mr: 3,
+          }}
+        >
+          <img
+            src={logo}
+            alt="Parkud"
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
+          />
+        </Box>
         <Typography variant="h4" className="fade-animation">
           ¡Ya casi estás dentro!
         </Typography>

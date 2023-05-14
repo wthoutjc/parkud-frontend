@@ -39,14 +39,9 @@ const LandingPage = () => {
         </Box>
         <Box className="Title">
           <Typography variant="h1" fontWeight={700} sx={{ mb: 2 }}>
-            Parquea sin preocupaciones
+            <span style={{ color: "#f1c40f" }}>Parquea</span> <span>sin</span> <span style={{ color: "#EA2027" }}>preocupaciones</span>
           </Typography>
-          <Typography
-            variant="h6"
-            fontWeight={400}
-            color="error.main"
-            sx={{ mb: 2 }}
-          >
+          <Typography variant="h6" fontWeight={400} sx={{ mb: 2 }}>
             Nuestros parqueaderos te ofrecen la tranquilidad que necesitas en tu
             día a día
           </Typography>

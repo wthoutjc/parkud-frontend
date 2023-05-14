@@ -35,6 +35,9 @@ import { v4 as uuid } from "uuid";
 import { useAppDispatch } from "../../../hooks";
 import { newNotification } from "../../../reducers";
 
+// Images
+import logo from "../../../styles/img/logo.png";
+
 interface Props {
   back: () => void;
   signUpPrev: ISignUp;
@@ -280,6 +283,21 @@ const PaySignUp = ({ back, signUpPrev }: Props) => {
           backgroundColor: "primary.light",
         }}
       >
+        <Box
+          sx={{
+            width: "100px",
+            mr: 3,
+          }}
+        >
+          <img
+            src={logo}
+            alt="Parkud"
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
+          />
+        </Box>
         <Typography variant="h4" className="fade-animation">
           ¡Ya casi terminas!
         </Typography>

@@ -5,6 +5,7 @@ import {
   Container,
   Toolbar,
   Typography,
+  Divider,
 } from "@mui/material";
 import { ButtonProps } from "@mui/material/Button";
 
@@ -66,7 +67,8 @@ const Navbar = () => {
               }}
               color="text.primary"
             >
-              PAR-KUD
+              PAR-<span style={{ color: "#f1c40f" }}>K</span>U
+              <span style={{ color: "red" }}>D</span>
             </Typography>
           </Link>
 
@@ -128,6 +130,12 @@ const Navbar = () => {
                 Iniciar sesión
               </StyledButton>
             </Link>
+            <Divider
+              orientation="vertical"
+              variant="middle"
+              flexItem
+              sx={{ ml: 2 }}
+            />
             <Link
               to={"/signup"}
               style={{

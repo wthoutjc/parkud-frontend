@@ -28,6 +28,9 @@ import { Link } from "react-router-dom";
 // Auth - Custom Hook
 import { useAuth } from "../../../hooks";
 
+// Images
+import logo from "../../../styles/img/logo.png";
+
 const LogIn = () => {
   const {
     status,
@@ -191,6 +194,21 @@ const LogIn = () => {
           backgroundColor: "primary.light",
         }}
       >
+        <Box
+          sx={{
+            width: "100px",
+            mr: 3,
+          }}
+        >
+          <img
+            src={logo}
+            alt="Parkud"
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
+          />
+        </Box>
         <Typography variant="h4" className="fade-animation">
           ¡Bienvenid@!
         </Typography>

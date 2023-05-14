@@ -15,6 +15,9 @@ import { useForm } from "react-hook-form";
 // Styled Components & Components
 import { StyledTextField, StyledButton } from "../../../components";
 
+// Images
+import logo from "../../../styles/img/logo.png";
+
 interface Props {
   updatePassword: (token: string) => Promise<void>;
 }
@@ -159,6 +162,21 @@ const UpdatePassword = ({ updatePassword }: Props) => {
           backgroundColor: "primary.light",
         }}
       >
+        <Box
+          sx={{
+            width: "100px",
+            mr: 3,
+          }}
+        >
+          <img
+            src={logo}
+            alt="Parkud"
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
+          />
+        </Box>
         <Typography variant="h4" className="fade-animation">
           Primer inicio de sesión
         </Typography>
