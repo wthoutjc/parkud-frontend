@@ -46,8 +46,12 @@ const Navbar = () => {
               textDecoration: "none",
             }}
             onClick={() => {
-              const anchor = document.querySelector("/#bienvenido");
-              anchor?.scrollIntoView({ behavior: "smooth" });
+              const anchor = document.querySelector("#bienvenido");
+              anchor?.scrollIntoView({
+                behavior: "smooth",
+                block: "nearest",
+                inline: "start",
+              });
             }}
           >
             <Typography
@@ -85,10 +89,11 @@ const Navbar = () => {
                 key={to}
                 to={to}
                 onClick={() => {
-                  const anchor = document.querySelector(to);
+                  const anchor = document.querySelector(to.replace("/", ""));
                   anchor?.scrollIntoView({
                     behavior: "smooth",
-                    block: "center",
+                    block: "nearest",
+                    inline: "start",
                   });
                 }}
                 style={{
