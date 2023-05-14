@@ -1,5 +1,5 @@
-import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useCallback, useState } from "react";
 
 // uuid
 import { v4 as uuid } from "uuid";
@@ -35,6 +35,8 @@ interface AuthProps {
 }
 
 const useAuth = () => {
+  const navigate = useNavigate();
+
   const [status, setStatus] = useState<AuthProps>({
     error: false,
     message: "",
@@ -64,7 +66,6 @@ const useAuth = () => {
   };
 
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const LogIn = useCallback(async (loginData: ILogin) => {
     resetStatus();
@@ -210,22 +211,11 @@ const useAuth = () => {
         message: "Cerrando sesión",
       })
     );
-    resetRequest();
 
-    try {
-      // const res = await logoutService();
-      // if (!res.ok)
-      //   setStatus({
-      //     error: true,
-      //     message: "Falló al cerrar sesión",
-      //   });
-    } catch (error) {
-      console.error(error);
-    }
-
-    // await signOut({ redirect: false });
+    localStorage.removeItem("token-parkud");
     dispatch(resetRequest());
-    return navigate("/");
+    resetStatus();
+    navigate("/login");
   }, [dispatch, navigate]);
 
   return {

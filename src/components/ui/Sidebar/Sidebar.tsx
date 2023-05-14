@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import {
   ListItemButton,
@@ -23,7 +24,13 @@ import { StyledDrawer, StyledDrawerHeader } from "../../../components";
 import { useAppSelector } from "../../../hooks";
 import SidebarList from "./SidebarList";
 
+// Auth
+import { useAuth } from "../../../hooks";
+
 export function Sidebar() {
+  const navigate = useNavigate();
+  const { LogOut } = useAuth();
+
   const { user } = useAppSelector((state) => state.auth);
   const { hierarchy } = user;
 
@@ -88,12 +95,21 @@ export function Sidebar() {
         </StyledDrawerHeader>
         <List>
           {[
-            { message: "Cuenta", icon: <AccountBoxIcon /> },
-            { message: "Cerrar sesión", icon: <LogoutIcon /> },
-          ].map(({ icon, message }, index) => (
+            {
+              message: "Cuenta",
+              icon: <AccountBoxIcon />,
+              action: () => navigate("/account"),
+            },
+            {
+              message: "Cerrar sesión",
+              icon: <LogoutIcon />,
+              action: LogOut,
+            },
+          ].map(({ icon, message, action }, index) => (
             <ListItem key={index} disablePadding sx={{ display: "block" }}>
               <Tooltip title={!open && message}>
                 <ListItemButton
+                  onClick={action}
                   sx={{
                     minHeight: 48,
                     justifyContent: open ? "initial" : "center",

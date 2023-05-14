@@ -23,6 +23,7 @@ const PrivateRouter = () => {
     const token = localStorage.getItem("token-parkud");
 
     if (!token) {
+      setRedirect(true);
       dispatch(logout());
       return;
     }
