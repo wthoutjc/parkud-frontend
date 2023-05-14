@@ -21,6 +21,7 @@ const Layout = ({ children }: Props) => {
       >
         <Box
           sx={{
+            width: "100%",
             maxWidth: "1655px",
           }}
         >

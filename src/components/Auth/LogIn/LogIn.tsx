@@ -113,7 +113,7 @@ const LogIn = () => {
                 type={showPassword ? "text" : "password"}
                 placeholder="Contraseña"
                 label="Contraseña*"
-                autoComplete="parkud-password"
+                autoComplete="off"
                 error={!!errors.password}
                 helperText={
                   errors.password
@@ -159,7 +159,7 @@ const LogIn = () => {
                     mb: 2,
                   }}
                 >
-                  <Typography variant="body2" color="error.main">
+                  <Typography variant="body2" color="error.main" fontWeight={800}>
                     {message}
                   </Typography>
                 </Box>
