@@ -64,6 +64,7 @@ const Navbar = () => {
                 fontWeight: 700,
                 letterSpacing: ".1rem",
                 textDecoration: "none",
+                userSelect: "none",
               }}
               color="text.primary"
             >

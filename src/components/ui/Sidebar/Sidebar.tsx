@@ -66,10 +66,12 @@ export function Sidebar() {
                   fontWeight: 700,
                   letterSpacing: ".1rem",
                   textDecoration: "none",
+                  userSelect: "none",
                 }}
                 color="text.primary"
               >
-                PAR-KUD
+                PAR-<span style={{ color: "#f1c40f" }}>K</span>U
+                <span style={{ color: "red" }}>D</span>
               </Typography>
               <IconButton
                 onClick={handleDrawerClose}
