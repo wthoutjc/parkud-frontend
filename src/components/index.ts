@@ -7,3 +7,4 @@ export * from "./SuperAdmin";
 export * from "./Operator";
 export * from "./Client";
 export * from "./Stats";
+export * from "./Maps";

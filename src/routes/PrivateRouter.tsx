@@ -28,10 +28,10 @@ const PrivateRouter = () => {
       return;
     }
 
-    if (!logged && token && !loading) GetUser().then(() => setRedirect(true));
+    if (!logged && token && !loading) GetUser().then(() => setRedirect(false));
   }, [dispatch, GetUser, logged, loading]);
 
-  return logged ? <Outlet /> : redirect ? <Navigate to="/login" /> : <Navigate to="/error" />;
+  return logged ? <Outlet /> : redirect ? <Navigate to="/login" /> : null;
 };
 
 export { PrivateRouter };

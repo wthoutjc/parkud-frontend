@@ -13,10 +13,6 @@ const PublicRouter = () => {
     if (token) return navigate("/home");
   }, [navigate]);
 
-  useEffect(() => {
-    console.log(logged);
-  }, [logged])
-
   return !logged ? <Outlet /> : <Navigate to="/home" />;
 };
 
