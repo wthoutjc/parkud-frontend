@@ -2,17 +2,44 @@ import { useState } from "react";
 import { Box, IconButton, Paper, Typography } from "@mui/material";
 
 // Components
-import { Maps } from "../../components";
+import { Maps, Table } from "../../components";
 
 // Icons
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 const Client = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   return (
     <Box>
+      {/* <Table
+        to="xd"
+        loading={false}
+        page={1}
+        setPage={() => {}}
+        limit={20}
+        setLimit={() => {}}
+        totalData={1000}
+        title="Parqueaderos"
+        columns={["ID", "Nombre", "Costo"]}
+        data={[
+          { id: "1", name: "Parqueadero 1", cost: "1000" },
+          { id: "2", name: "Parqueadero 2", cost: "2000" },
+          { id: "3", name: "Parqueadero 3", cost: "3000" },
+        ]}
+        context={{
+          delete: {
+            enabled: false,
+          },
+          update: {
+            enabled: false,
+          },
+          read: {
+            enabled: true,
+          },
+        }}
+      /> */}
       <Box
         sx={{
           display: "flex",

@@ -22,6 +22,8 @@ const Maps = ({ open }: Props) => {
       <Marker onClick={open} position={center} />
       <Marker onClick={open} position={center} />
       <Marker onClick={open} position={center} />
+      <Marker onClick={open} position={center} />
+      <Marker onClick={open} position={center} />
     </GoogleMap>
   );
 };

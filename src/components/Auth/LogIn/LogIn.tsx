@@ -92,7 +92,7 @@ const LogIn = () => {
                 helperText={
                   errors.username
                     ? errors.username.message
-                    : "Escibe tu nombre de usuario..."
+                    : "Escribe tu nombre de usuario..."
                 }
                 {...register("username", {
                   required: "El nombre de usuario es obligatorio",
@@ -126,7 +126,7 @@ const LogIn = () => {
                 helperText={
                   errors.password
                     ? errors.password.message
-                    : "Escibe tu contraseña..."
+                    : "Escribe tu contraseña..."
                 }
                 sx={{ mb: 2 }}
                 {...register("password", {
