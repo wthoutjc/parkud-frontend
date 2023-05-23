@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Typography, TextField, InputAdornment } from "@mui/material";
+import { Box, Typography, TextField, InputAdornment, IconButton } from "@mui/material";
 
 // Interfaces
 import { ISignUp, IPaySignUp } from "../../../interfaces";

@@ -2,6 +2,7 @@ import { Box } from "@mui/material";
 
 // Components
 import { Navbar } from "../../../components";
+import { Footer } from "../../../components";
 
 interface Props {
   children: React.ReactNode;
@@ -29,6 +30,7 @@ const Layout = ({ children }: Props) => {
         </Box>
       </Box>
     </>
+
   );
 };
 
