@@ -73,7 +73,7 @@ const TwoFactor = ({ user, TwoFactor: twoFactor }: Props) => {
                 helperText={
                   errors.token
                     ? errors.token.message
-                    : "Escibe tu código de verificación..."
+                    : "Escribe tu código de verificación..."
                 }
                 {...register("token", {
                   required: "El código de verificación es requerido",

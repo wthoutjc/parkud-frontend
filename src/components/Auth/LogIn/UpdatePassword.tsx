@@ -71,7 +71,7 @@ const UpdatePassword = ({ updatePassword }: Props) => {
                 helperText={
                   errors.password
                     ? errors.password.message
-                    : "Escibe tu contraseña..."
+                    : "Escribe tu contraseña..."
                 }
                 sx={{ mb: 2 }}
                 {...register("password", {
@@ -111,7 +111,7 @@ const UpdatePassword = ({ updatePassword }: Props) => {
                 helperText={
                   errors.confirmPassword
                     ? errors.confirmPassword.message
-                    : "Escibe tu contraseña..."
+                    : "Escribe tu contraseña..."
                 }
                 sx={{ mb: 2 }}
                 {...register("confirmPassword", {
