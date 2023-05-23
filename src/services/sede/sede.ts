@@ -2,8 +2,10 @@
 import axios from "axios";
 import { api } from "../../utils";
 
-const obteneRegionales =async()=>{
+// Interfaces
+import { IResponse } from "../../interfaces";
 
+const getRegionales = async (): Promise<IResponse> => {
   try {
     const response = await api.get(`/obtener_regionales`, {
       headers: {
@@ -30,5 +32,5 @@ const obteneRegionales =async()=>{
       error: "Falló la solicitud al servidor",
     };
   }
-}
-export {obteneRegionales};
+};
+export { getRegionales };

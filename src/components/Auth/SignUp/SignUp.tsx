@@ -67,7 +67,7 @@ const SignUp = () => {
                 helperText={
                   errors.email
                     ? errors.email.message
-                    : "Escibe tu correo electrónico..."
+                    : "Escribe tu correo electrónico..."
                 }
                 {...register("email", {
                   required: "El correo electrónico es obligatorio",
@@ -88,7 +88,7 @@ const SignUp = () => {
                   label="Nombre*"
                   error={!!errors.name}
                   helperText={
-                    errors.name ? errors.name.message : "Escibe tu nombre..."
+                    errors.name ? errors.name.message : "Escribe tu nombre..."
                   }
                   {...register("name", {
                     required: "El nombre es obligatorio",
@@ -110,7 +110,7 @@ const SignUp = () => {
                   helperText={
                     errors.lastName
                       ? errors.lastName.message
-                      : "Escibe tu apellido..."
+                      : "Escribe tu apellido..."
                   }
                   {...register("lastName", {
                     required: "El apellido es obligatorio",
@@ -167,7 +167,7 @@ const SignUp = () => {
                 helperText={
                   errors.phone
                     ? errors.phone.message
-                    : "Escibe tu número de celular..."
+                    : "Escribe tu número de celular..."
                 }
                 {...register("phone", {
                   required: "El número de celular es obligatorio",

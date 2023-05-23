@@ -1,7 +1,7 @@
 export interface INewSede {
   nombre : string;
-  latitud : string;
-  longitud : string;
+  latitud : number;
+  longitud : number;
   fidelizacion : string;
   horaInicio : string;
   horaFin : string;

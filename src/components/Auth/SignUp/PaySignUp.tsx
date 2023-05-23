@@ -107,7 +107,7 @@ const PaySignUp = ({ back, signUpPrev }: Props) => {
                 helperText={
                   errors.idNumber
                     ? errors.idNumber.message
-                    : "Escibe tu número de cédula..."
+                    : "Escribe tu número de cédula..."
                 }
                 {...register("idNumber", {
                   required: "El número de cédula es obligatorio",
@@ -142,7 +142,7 @@ const PaySignUp = ({ back, signUpPrev }: Props) => {
                 helperText={
                   errors.cardName
                     ? errors.cardName.message
-                    : "Escibe el nombre que aparece en la tarjeta..."
+                    : "Escribe el nombre que aparece en la tarjeta..."
                 }
                 {...register("cardName", {
                   required: "El nombre en la tarjeta es obligatorio",
@@ -168,7 +168,7 @@ const PaySignUp = ({ back, signUpPrev }: Props) => {
                 helperText={
                   errors.cardNumber
                     ? errors.cardNumber.message
-                    : "Escibe el número de tu tarjeta..."
+                    : "Escribe el número de tu tarjeta..."
                 }
                 {...register("cardNumber", {
                   required: "El número de tarjeta es obligatorio",
@@ -200,7 +200,7 @@ const PaySignUp = ({ back, signUpPrev }: Props) => {
                   helperText={
                     errors.cardDate
                       ? errors.cardDate.message
-                      : "Escibe la fecha de expiración de tu tarjeta..."
+                      : "Escribe la fecha de expiración de tu tarjeta..."
                   }
                   {...register("cardDate", {
                     required: "La fecha de expiración es obligatoria",
@@ -235,7 +235,7 @@ const PaySignUp = ({ back, signUpPrev }: Props) => {
                   helperText={
                     errors.cardCvv
                       ? errors.cardCvv.message
-                      : "Escibe el CVV de tu tarjeta..."
+                      : "Escribe el CVV de tu tarjeta..."
                   }
                   {...register("cardCvv", {
                     required: "El CVV es obligatorio",

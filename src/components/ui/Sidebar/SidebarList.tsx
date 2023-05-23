@@ -1,6 +1,5 @@
 import {
   Typography,
-  ListItemButton,
   ListItem,
   List,
   ListItemIcon,
@@ -12,6 +11,9 @@ import { Hierarchy } from "../../../interfaces";
 
 // List - Data
 import { CLIENT_LIST } from "./ClientList";
+
+// StyledComponents
+import { StyledListItemButton } from "..";
 
 interface Props {
   open: boolean;
@@ -25,14 +27,12 @@ const SidebarList = ({ open, hierarchy }: Props) => {
         CLIENT_LIST.map(({ icon, message }, index) => (
           <ListItem key={index} disablePadding sx={{ display: "block" }}>
             <Tooltip title={!open && message}>
-              <ListItemButton
+              <StyledListItemButton
                 sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
+                  justifyContent: open
+                    ? "initial !important"
+                    : "center !important",
                   px: 2.5,
-                  "&:hover": {
-                    backgroundColor: "primary.light",
-                  },
                 }}
               >
                 <ListItemIcon
@@ -40,7 +40,7 @@ const SidebarList = ({ open, hierarchy }: Props) => {
                     minWidth: 0,
                     mr: open ? 3 : "auto",
                     justifyContent: "center",
-                    color: "primary.dark",
+                    color: "primary.contrastText",
                   }}
                 >
                   {icon}
@@ -53,7 +53,7 @@ const SidebarList = ({ open, hierarchy }: Props) => {
                 >
                   {message}
                 </Typography>
-              </ListItemButton>
+              </StyledListItemButton>
             </Tooltip>
           </ListItem>
         ))}
