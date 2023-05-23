@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Typography,
   Box,
@@ -18,10 +17,24 @@ interface Props {
   columns: string[];
   data: ITableData[];
   loading: boolean;
+  dataEdit: ITableData[];
+  setDataEdit: (data: ITableData[]) => void;
 }
 
-const TableTarifa = ({ title, columns, data }: Props) => {
-  const [dataEdit, setDataEdit] = useState(data);
+const TableTarifa = ({
+  title,
+  columns,
+  data,
+  dataEdit,
+  setDataEdit,
+}: Props) => {
+  const allKeys = data.reduce((acc, item) => {
+    return new Set([...acc, ...Object.keys(item)]);
+  }, new Set<keyof ITableData>());
+  const columnsData = Array.from(allKeys).map((key) => ({
+    key,
+    label: key,
+  }));
 
   return (
     <>
@@ -55,35 +68,35 @@ const TableTarifa = ({ title, columns, data }: Props) => {
           }}
         >
           <TableRow>
-            {columns?.map((column, index) => {
+            {columns?.map((value, index) => {
               return (
                 <TableCell
                   key={index}
                   sx={{ color: "primary.contrastText" }}
                   align="left"
                 >
-                  {column}
+                  {value}
                 </TableCell>
               );
             })}
           </TableRow>
         </TableHead>
         <TableBody>
-          {data?.map((row, index) => {
+          {dataEdit?.map((row, index) => {
             return (
               <StyledTableRow
                 key={index}
                 tabIndex={-1}
                 className="table__no-selected"
               >
-                {columns?.map((column, _index) => (
+                {columnsData?.map(({ label }, _index) => (
                   <TableCell
                     key={index + _index}
                     style={{
                       padding: 0,
                     }}
                   >
-                    {_index > 0 ? (
+                    {_index > 1 ? (
                       <input
                         style={{
                           backgroundColor: "rgba(255, 255, 255, 0.028)",
@@ -91,10 +104,11 @@ const TableTarifa = ({ title, columns, data }: Props) => {
                           padding: "1em",
                           width: "100%",
                         }}
-                        value={row[column] || "No registra"}
+                        type="number"
+                        value={row[label]}
                         onChange={(e) => {
                           const newData = [...dataEdit];
-                          newData[index][_index] = e.target.value;
+                          newData[index][label] = e.target.value;
                           setDataEdit(newData);
                         }}
                       />
@@ -105,7 +119,7 @@ const TableTarifa = ({ title, columns, data }: Props) => {
                         fontWeight={600}
                         sx={{ p: 2 }}
                       >
-                        {row[column] || "No registra"}
+                        {row[label]}
                       </Typography>
                     )}
                   </TableCell>

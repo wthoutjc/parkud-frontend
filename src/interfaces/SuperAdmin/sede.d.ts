@@ -1,11 +1,20 @@
+import { ITableData } from "..";
+
 export interface ICharacteristic {
   id: number;
   name: string;
 }
 
+export interface ITariff {
+  id: number;
+  name: string;
+  price: number;
+  parkingSpaces: number;
+}
+
 export interface ISede {
   name: string;
-  idAdmin: number;
+  idAdmin: string;
   loyalty: boolean;
   startTime: string;
   endTime: string;
@@ -15,5 +24,5 @@ export interface ISede {
   regional: string;
   city: string;
   fullTime: boolean;
-  tariff: number;
+  tariff: ITableData[];
 }

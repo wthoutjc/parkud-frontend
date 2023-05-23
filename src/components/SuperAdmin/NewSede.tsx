@@ -32,6 +32,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FmdGoodIcon from "@mui/icons-material/FmdGood";
 import LocalParkingIcon from "@mui/icons-material/LocalParking";
+import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 
 // React Router DOM
 // import { Link, useNavigate } from "react-router-dom";
@@ -70,9 +71,19 @@ const NewSede = () => {
     formState: { errors },
   } = useForm<ISede>({
     defaultValues: {
+      idAdmin: "Seleccionar",
       regional: "Seleccionar",
       city: "Seleccionar",
+      loyalty: false,
       fullTime: false,
+      tariff: [
+        {
+          id: "0",
+          name: "Carro",
+          price: "",
+          parkingSpaces: "",
+        },
+      ],
     },
   });
 
@@ -93,6 +104,21 @@ const NewSede = () => {
       dispatch(newNotification(notification));
       return;
     }
+
+    watch("tariff").forEach((tariff) => {
+      const { name, price, parkingSpaces } = tariff;
+      if (!price || !parkingSpaces) {
+        const notification = {
+          id: uuid(),
+          title: "Error",
+          message: `Digita el precio y los cupos para el vehículo ${name}`,
+          type: "error" as "success" | "error",
+          autoDismiss: 5000,
+        };
+        dispatch(newNotification(notification));
+        return;
+      }
+    });
 
     setLoading(true);
     console.log(data);
@@ -161,30 +187,35 @@ const NewSede = () => {
         <TextField
           disabled={loading}
           fullWidth
-          type="text"
-          placeholder="Ej 1234567890"
-          autoComplete="parkud-id-administrador"
-          label="Cédula Administrador*"
-          sx={{ mb: 2 }}
+          select
+          placeholder="Ej Pepito Pérez"
+          label="Administrador*"
           error={!!errors.idAdmin}
+          sx={{ mb: 2 }}
           helperText={
             errors.idAdmin
               ? errors.idAdmin.message
-              : "Escribe la cédula del Administrador encargado..."
+              : "Selecciona un administrador para esta sede"
           }
           {...register("idAdmin", {
-            required: `La cédula del Administrador encargado de ${
-              watch("name") || "Sin nombre"
-            } es obligatoria`,
+            required: "El administrador es obligatorio",
+            validate: (value) =>
+              value !== "Seleccionar" || "Selecciona una administrador",
           })}
+          value={watch("idAdmin")}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <AccountCircleIcon />
+                <SupervisedUserCircleIcon />
               </InputAdornment>
             ),
           }}
-        />
+        >
+          <MenuItem value={"Seleccionar"}>Seleccionar</MenuItem>
+          <MenuItem value={"pedidos"}>Pedidos</MenuItem>
+          <MenuItem value={"bodegas"}>Bodegas</MenuItem>
+        </TextField>
+
         <Box
           sx={{
             display: "flex",
@@ -382,8 +413,8 @@ const NewSede = () => {
             >
               <TextField
                 fullWidth
-                type="datetime-local"
-                placeholder="Ej "
+                type="text"
+                placeholder="Ej 06:00"
                 autoComplete="parkud-start-time"
                 label="Hora Inicio*"
                 sx={{ mb: 1, width: "49%" }}
@@ -395,6 +426,9 @@ const NewSede = () => {
                 }
                 {...register("startTime", {
                   required: "La hora de inicio es obligatoria...",
+                  validate: (value) =>
+                    /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(value) ||
+                    "Formato de hora incorrecto",
                 })}
                 value={watch("startTime")}
                 InputProps={{
@@ -407,8 +441,8 @@ const NewSede = () => {
               />
               <TextField
                 fullWidth
-                type="datetime"
-                placeholder="Ej Sede Principal"
+                type="text"
+                placeholder="Ej 23:00"
                 autoComplete="parkud-end-time"
                 label="Hora Fin*"
                 sx={{ mb: 1, width: "50%" }}
@@ -420,6 +454,9 @@ const NewSede = () => {
                 }
                 {...register("endTime", {
                   required: "La hora de fin es obligatoria...",
+                  validate: (value) =>
+                    /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(value) ||
+                    "Formato de hora incorrecto",
                 })}
                 value={watch("endTime")}
                 InputProps={{
@@ -513,12 +550,10 @@ const NewSede = () => {
           <TableTarifa
             loading={loading}
             title="Digita las tarifas"
-            columns={["Tipo", "Tarifa", "Cupos"]}
-            data={[
-              {
-                Tipo: "Carro",
-              },
-            ]}
+            columns={["#", "Tipo de vehículo", "Precio", "Cupos"]}
+            data={watch("tariff")}
+            dataEdit={watch("tariff")}
+            setDataEdit={() => setValue("tariff", watch("tariff"))}
           />
         </Box>
 
