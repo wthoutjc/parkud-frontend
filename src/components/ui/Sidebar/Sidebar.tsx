@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import {
-  ListItemButton,
   ListItem,
   IconButton,
   List,
@@ -18,7 +17,11 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 // StyledComponents
-import { StyledDrawer, StyledDrawerHeader } from "../../../components";
+import {
+  StyledDrawer,
+  StyledDrawerHeader,
+  StyledListItemButton,
+} from "../../../components";
 
 // Redux
 import { useAppSelector } from "../../../hooks";
@@ -67,8 +70,11 @@ export function Sidebar() {
                   letterSpacing: ".1rem",
                   textDecoration: "none",
                   userSelect: "none",
+                  backgroundColor: "primary.light",
+                  p: 1,
+                  borderRadius: 2,
                 }}
-                color="text.primary"
+                color="primary.dark"
               >
                 PAR-<span style={{ color: "#f1c40f" }}>K</span>U
                 <span style={{ color: "red" }}>D</span>
@@ -76,7 +82,7 @@ export function Sidebar() {
               <IconButton
                 onClick={handleDrawerClose}
                 sx={{
-                  color: "primary.dark",
+                  color: "primary.contrastText",
                 }}
               >
                 <ChevronLeftIcon />
@@ -88,7 +94,7 @@ export function Sidebar() {
               onClick={handleDrawerOpen}
               edge="start"
               sx={{
-                color: "primary.dark",
+                color: "primary.contrastText",
               }}
             >
               <MenuIcon />
@@ -110,15 +116,11 @@ export function Sidebar() {
           ].map(({ icon, message, action }, index) => (
             <ListItem key={index} disablePadding sx={{ display: "block" }}>
               <Tooltip title={!open && message}>
-                <ListItemButton
+                <StyledListItemButton
                   onClick={action}
                   sx={{
-                    minHeight: 48,
                     justifyContent: open ? "initial" : "center",
                     px: 2.5,
-                    "&:hover": {
-                      backgroundColor: "primary.light",
-                    },
                   }}
                 >
                   <ListItemIcon
@@ -126,7 +128,7 @@ export function Sidebar() {
                       minWidth: 0,
                       mr: open ? 3 : "auto",
                       justifyContent: "center",
-                      color: "primary.dark",
+                      color: "primary.contrastText",
                     }}
                   >
                     {icon}
@@ -139,7 +141,7 @@ export function Sidebar() {
                   >
                     {message}
                   </Typography>
-                </ListItemButton>
+                </StyledListItemButton>
               </Tooltip>
             </ListItem>
           ))}

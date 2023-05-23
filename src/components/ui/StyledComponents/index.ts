@@ -5,3 +5,4 @@ export * from "./StyledSidebar";
 export * from "./StyledSelect";
 export * from "./StyledCheckbox";
 export * from "./StyledTableRow";
+export * from "./StyledListItemButton";
