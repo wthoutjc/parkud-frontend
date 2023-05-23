@@ -100,7 +100,9 @@ const useAuth = () => {
       const { success, error, message, token, cambiarContrasena } =
         await twoFactor(code, user.id);
 
-      if (success && token) {
+      console.log({ success, error, message, token, cambiarContrasena });
+
+      if (success && token && cambiarContrasena !== 1) {
         localStorage.setItem("token-parkud", token);
 
         const notification = {
@@ -122,6 +124,28 @@ const useAuth = () => {
         });
 
         return dispatch(login());
+      } else if (success && token && cambiarContrasena !== 0) {
+        localStorage.setItem("token-up", token);
+
+        const notification = {
+          id: uuid(),
+          title: "Cambiar contraseña",
+          message: message ?? "Por favor cambia tu contraseña",
+          type: "success" as "success" | "error",
+          autoDismiss: 5000,
+        };
+
+        dispatch(newNotification(notification));
+        dispatch(setUser(user));
+        setStatus({
+          error: false,
+          message: message ?? "Sesión iniciada correctamente",
+          twoFactor: false,
+          user,
+          updatePassword: cambiarContrasena,
+        });
+
+        return;
       }
 
       setError(error ?? "Error al iniciar sesión");
@@ -144,6 +168,11 @@ const useAuth = () => {
       dispatch(newNotification(notification));
 
       if (success) {
+        localStorage.setItem(
+          "token-parkud",
+          localStorage.getItem("token-up") ?? ""
+        );
+        localStorage.removeItem("token-up");
         setStatus({
           ...status,
           updatePassword: 0,

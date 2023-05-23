@@ -86,7 +86,7 @@ const updatePassword = async (password: string): Promise<IResponse> => {
       { nueva_contrasena: password },
       {
         headers: {
-          Authorization: `${localStorage.getItem("token-parkud")}`,
+          Authorization: `${localStorage.getItem("token-up")}`,
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
         },

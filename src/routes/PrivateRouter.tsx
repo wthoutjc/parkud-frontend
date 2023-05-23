@@ -14,15 +14,17 @@ const PrivateRouter = () => {
   const [redirect, setRedirect] = useState(false);
 
   const { logged } = useAppSelector((state) => state.auth);
-  const { GetUser } = useAuth();
+  const { GetUser, status } = useAuth();
+  console.log(status.updatePassword);
 
   const { request } = useAppSelector((state) => state.ui);
   const { loading } = request;
 
   useEffect(() => {
     const token = localStorage.getItem("token-parkud");
+    const tokenUp = localStorage.getItem("token-up");
 
-    if (!token) {
+    if (!token && !tokenUp) {
       setRedirect(true);
       dispatch(logout());
       return;

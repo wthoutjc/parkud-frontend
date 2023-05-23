@@ -2,7 +2,7 @@
 import { IRoute } from "../interfaces";
 
 // Components
-import { AuthLayout, Home, NewSede, SuperAdmin } from "../components";
+import { AuthLayout, Home, NewAdministrador, NewSede, SuperAdmin } from "../components";
 
 const privateRoutes: IRoute[] = [
   {
@@ -21,6 +21,12 @@ const privateRoutes: IRoute[] = [
     path: "/new-sede",
     name: "Nueva sede",
     element: <AuthLayout children={<NewSede />} />,
+    exact: true,
+  },
+  {
+    path: "/new-administrador",
+    name: "NewAdministrador",
+    element: <AuthLayout children={<NewAdministrador />} />,
     exact: true,
   },
 ];
