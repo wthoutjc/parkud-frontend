@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 // Components
 import { Box, Button, Typography, Divider } from "@mui/material";
-
+import { Footer } from "../../components/ui/Footer";
 // Images
 import welcomeImg from "../../styles/img/welcome.png";
 import Circle from "../../styles/img/Circle.png";
@@ -204,7 +204,7 @@ const LandingPage = () => {
           </div>
         </Box>
       </section>
-      {/* TODO: Footer */}
+      <Footer/>
     </>
   );
 };
