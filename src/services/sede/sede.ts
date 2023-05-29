@@ -14,20 +14,21 @@ const registerSede = async (data: ISede): Promise<IResponse> => {
   try {
     const postData = {
       nombre: data.name,
-      latitud: data.lat,
-      longitud: data.lng,
-      fidelizacion: data.loyalty ? 1 : 0,
+      latitud: String(data.lat),
+      longitud: String(data.lng),
+      fidelizacion: data.loyalty ? "1" : "0",
       horaInicio: data.startTime,
       horaFin: data.endTime,
-      tiempoCompleto: data.fullTime ? 1 : 0,
-      idAdministrador: data.idAdmin,
+      tiempoCompleto: data.fullTime ? "1" : "0",
+      idAdministrador: String(data.idAdmin),
+      idUbicacion: String(data.city),
       caracteristicas: data.characteristics.map((c) => {
         const caracteristica = JSON.parse(c) as {
           idCaracteristica: number;
           nombre: string;
         };
 
-        return { idCaracteristica: caracteristica.idCaracteristica };
+        return { idCaracteristica: String(caracteristica.idCaracteristica) };
       }),
       tarifas: data.tariff.map(({ id, price, parkingSpaces }) => {
         return {
@@ -37,8 +38,6 @@ const registerSede = async (data: ISede): Promise<IResponse> => {
         };
       }),
     };
-
-    console.log(postData);
 
     const response = await api.post("/sede/agregar", postData, {
       headers: {

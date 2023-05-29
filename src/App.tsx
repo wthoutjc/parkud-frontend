@@ -1,3 +1,4 @@
+// TODO: Verificar que se pueda añadir sede y usuario
 import "./styles/styles.scss";
 import "animate.css";
 

@@ -37,7 +37,7 @@ const SuperAdmin = () => {
         variant="contained"
         color="success"
         startIcon={<AddIcon />}
-        sx={{ mb: 2 }}
+        sx={{ mb: 2, mr: 2 }}
       >
         <Link
           to="/new-sede"
@@ -51,7 +51,7 @@ const SuperAdmin = () => {
       </Button>
       <Button
         variant="contained"
-        color="success"
+        color="primary"
         startIcon={<AddIcon />}
         sx={{ mb: 2 }}
       >

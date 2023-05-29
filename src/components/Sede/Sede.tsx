@@ -14,9 +14,8 @@ const Sede = () => {
 
   useEffect(() => {
     setLoading(true);
-    getSede(Number(idSede)).then((sede) => {
+    getSede(Number(idSede)).then(() => {
       setLoading(false);
-      console.log(sede);
     });
   }, [idSede]);
 

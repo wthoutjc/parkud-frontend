@@ -34,7 +34,7 @@ import LocalParkingIcon from "@mui/icons-material/LocalParking";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 
 // React Router DOM
-// import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // Services
 import {
@@ -56,6 +56,7 @@ import { SelectLocation, TableTarifa } from "..";
 
 const NewSede = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
   const [loadingRegionales, setLoadingRegionales] = useState(false);
@@ -105,6 +106,8 @@ const NewSede = () => {
       loyalty: false,
       fullTime: false,
       tariff: [],
+      startTime: "00:00",
+      endTime: "00:00",
     },
   });
 
@@ -154,6 +157,7 @@ const NewSede = () => {
         autoDismiss: 5000,
       };
       dispatch(newNotification(notification));
+      return navigate("/home");
     });
   };
 
@@ -300,7 +304,7 @@ const NewSede = () => {
             {...register("name", {
               required: "El nombre es obligatorio",
             })}
-            value={watch("name")}
+            value={watch("name") || ""}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -433,8 +437,7 @@ const NewSede = () => {
               {...register("city", {
                 required: "La regional es obligatoria",
                 validate: (value) =>
-                  value !== "Seleccionar" ||
-                  `Selecciona una ciudad de ${watch("regional")}`,
+                  value !== "Seleccionar" || `Selecciona una ciudad`,
               })}
               value={watch("city")}
               InputProps={{
@@ -630,6 +633,7 @@ const NewSede = () => {
 
         <Button
           fullWidth
+          disabled={loading}
           type="submit"
           variant="contained"
           color="success"

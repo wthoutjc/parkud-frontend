@@ -59,11 +59,8 @@ const TableToolbar = ({ title, numSelected, context }: Props) => {
             >
               {context.read.enabled && (
                 <Tooltip title="Ver">
-                  <IconButton size="small" onClick={() => console.log("xd")}>
-                    <InfoIcon
-                      fontSize={"medium"}
-                      color="secondary"
-                    />
+                  <IconButton size="small" onClick={() => undefined}>
+                    <InfoIcon fontSize={"medium"} color="secondary" />
                   </IconButton>
                 </Tooltip>
               )}
