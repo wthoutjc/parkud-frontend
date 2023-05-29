@@ -27,7 +27,7 @@ const registerSede = async (data: ISede): Promise<IResponse> => {
           nombre: string;
         };
 
-        return caracteristica.idCaracteristica;
+        return { idCaracteristica: caracteristica.idCaracteristica };
       }),
       tarifas: data.tariff.map(({ id, price, parkingSpaces }) => {
         return {
@@ -37,6 +37,8 @@ const registerSede = async (data: ISede): Promise<IResponse> => {
         };
       }),
     };
+
+    console.log(postData);
 
     const response = await api.post("/sede/agregar", postData, {
       headers: {

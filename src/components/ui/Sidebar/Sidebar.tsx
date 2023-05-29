@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import {
   ListItem,
@@ -60,25 +60,32 @@ export function Sidebar() {
                 width: "100%",
               }}
             >
-              <Typography
-                variant="h6"
-                sx={{
-                  ml: 1,
-                  display: { xs: "none", md: "flex" },
-                  fontFamily: "monospace",
-                  fontWeight: 700,
-                  letterSpacing: ".1rem",
+              <Link
+                to="/home"
+                style={{
                   textDecoration: "none",
-                  userSelect: "none",
-                  backgroundColor: "primary.light",
-                  p: 1,
-                  borderRadius: 2,
                 }}
-                color="primary.dark"
               >
-                PAR-<span style={{ color: "#f1c40f" }}>K</span>U
-                <span style={{ color: "red" }}>D</span>
-              </Typography>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    ml: 1,
+                    display: { xs: "none", md: "flex" },
+                    fontFamily: "monospace",
+                    fontWeight: 700,
+                    letterSpacing: ".1rem",
+                    textDecoration: "none",
+                    userSelect: "none",
+                    backgroundColor: "primary.light",
+                    p: 1,
+                    borderRadius: 2,
+                  }}
+                  color="primary.dark"
+                >
+                  PAR-<span style={{ color: "#f1c40f" }}>K</span>U
+                  <span style={{ color: "red" }}>D</span>
+                </Typography>
+              </Link>
               <IconButton
                 onClick={handleDrawerClose}
                 sx={{

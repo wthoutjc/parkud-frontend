@@ -49,6 +49,22 @@ const SuperAdmin = () => {
           Nueva sede
         </Link>
       </Button>
+      <Button
+        variant="contained"
+        color="success"
+        startIcon={<AddIcon />}
+        sx={{ mb: 2 }}
+      >
+        <Link
+          to="/new-administrador"
+          style={{
+            textDecoration: "none",
+            color: "white",
+          }}
+        >
+          Registrar administrador
+        </Link>
+      </Button>
       <Table
         to="/sede"
         loading={false}
@@ -57,7 +73,7 @@ const SuperAdmin = () => {
         limit={limit}
         setLimit={setLimit}
         totalData={totalSedes}
-        title="Parqueaderos"
+        title="Sedes en Par-KUD"
         columns={["#", "Sede"]}
         data={sedes}
         context={{
