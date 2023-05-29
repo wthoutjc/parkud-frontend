@@ -17,7 +17,7 @@ import SwitchAccountIcon from "@mui/icons-material/SwitchAccount";
 import BadgeIcon from "@mui/icons-material/Badge";
 
 // React Router DOM
-// import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // uuid
 import { v4 as uuid } from "uuid";
@@ -27,21 +27,22 @@ import { useAppDispatch } from "../../hooks";
 import { newNotification } from "../../reducers";
 
 // Interfaces
-import { INewAdministrador } from "../../interfaces";
+import { INewAdmin } from "../../interfaces";
 
 // Services
 import { registerAdmin } from "../../services";
 
-const NewAdministrador = () => {
+const NewAdmin = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<INewAdministrador>({});
+  } = useForm<INewAdmin>({});
 
-  const handleNewAdministrador = async (data: INewAdministrador) => {
+  const handleNewAdmin = async (data: INewAdmin) => {
     setLoading(true);
     registerAdmin(data).then(({ success, error, message }) => {
       setLoading(false);
@@ -53,6 +54,7 @@ const NewAdministrador = () => {
         autoDismiss: 5000,
       };
       dispatch(newNotification(notification));
+      return navigate("/home");
     });
   };
 
@@ -70,7 +72,7 @@ const NewAdministrador = () => {
       <Typography variant="body1" sx={{ mb: 2 }} fontWeight={800}>
         Registrar: Nuevo administrador
       </Typography>
-      <form onSubmit={handleSubmit(handleNewAdministrador)}>
+      <form onSubmit={handleSubmit(handleNewAdmin)}>
         <TextField
           disabled={loading}
           fullWidth
@@ -209,4 +211,4 @@ const NewAdministrador = () => {
   );
 };
 
-export { NewAdministrador };
+export { NewAdmin };

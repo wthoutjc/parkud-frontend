@@ -5,7 +5,7 @@ import { IRoute } from "../interfaces";
 import {
   AuthLayout,
   Home,
-  NewAdministrador,
+  NewAdmin,
   NewSede,
   SuperAdmin,
   Sede,
@@ -32,8 +32,8 @@ const privateRoutes: IRoute[] = [
   },
   {
     path: "/new-administrador",
-    name: "NewAdministrador",
-    element: <AuthLayout children={<NewAdministrador />} />,
+    name: "NewAdmin",
+    element: <AuthLayout children={<NewAdmin />} />,
     exact: true,
   },
   {

@@ -1,4 +1,4 @@
-export interface INewAdministrador {
+export interface INewAdmin {
   nombre : string;
   apellido : string;
   correo : string;

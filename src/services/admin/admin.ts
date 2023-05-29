@@ -4,12 +4,12 @@ import { api } from "../../utils";
 
 // Interfaces
 import {
-  INewAdministrador,
+  INewAdmin,
   IResponse,
   IResponseAdmins,
 } from "../../interfaces";
 
-const registerAdmin = async (data: INewAdministrador): Promise<IResponse> => {
+const registerAdmin = async (data: INewAdmin): Promise<IResponse> => {
   try {
     const postData = {
       nombre: data.nombre,
