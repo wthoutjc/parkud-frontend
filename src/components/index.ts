@@ -8,3 +8,4 @@ export * from "./Operator";
 export * from "./Client";
 export * from "./Stats";
 export * from "./Maps";
+export * from "./Sede";

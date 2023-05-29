@@ -100,8 +100,6 @@ const useAuth = () => {
       const { success, error, message, token, cambiarContrasena } =
         await twoFactor(code, user.id);
 
-      console.log({ success, error, message, token, cambiarContrasena });
-
       if (success && token && cambiarContrasena !== 1) {
         localStorage.setItem("token-parkud", token);
 

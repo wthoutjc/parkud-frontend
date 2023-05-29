@@ -1,8 +1,8 @@
 import { ITableData } from "..";
 
 export interface ICharacteristic {
-  id: number;
-  name: string;
+  idCaracteristica: number;
+  nombre: string;
 }
 
 export interface ITariff {

@@ -182,9 +182,9 @@ export function Table({
                       />
                     </TableCell>
                   )}
-                  {columns.map((column, index) => (
-                    <TableCell key={`td-${index}-${column}`} align="left">
-                      {row[column] || "No registra"}
+                  {itemsData.map(({ label }, index) => (
+                    <TableCell key={`td-${index}-${label}`} align="left">
+                      {row[label] || "No registra"}
                     </TableCell>
                   ))}
                 </StyledTableRow>

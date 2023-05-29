@@ -1,5 +1,3 @@
-// TODO: Tiempo Completo FLAG - HoraInicio - HoraFin
-// TODO: Multi ComboBox - Características múltiples
 import { useState, useEffect } from "react";
 import {
   Box,
@@ -19,6 +17,7 @@ import {
   OutlinedInput,
   ListItemText,
   FormHelperText,
+  CircularProgress,
 } from "@mui/material";
 
 // Interfaces
@@ -38,7 +37,12 @@ import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 // import { Link, useNavigate } from "react-router-dom";
 
 // Services
-// import { getRegionales } from "../../services";
+import {
+  getAdmins,
+  getRegional,
+  getRegionales,
+  registerSede,
+} from "../../services";
 
 // uuid
 import { v4 as uuid } from "uuid";
@@ -48,19 +52,43 @@ import { useAppDispatch } from "../../hooks";
 import { newNotification } from "../../reducers";
 
 // Components
-import { SelectLocation, TableTarifa } from "../../components";
+import { SelectLocation, TableTarifa } from "..";
 
 const NewSede = () => {
   const dispatch = useAppDispatch();
 
   const [loading, setLoading] = useState(false);
+  const [loadingRegionales, setLoadingRegionales] = useState(false);
   const [render, setRender] = useState(false);
 
+  const [admins, setAdmins] = useState<
+    {
+      idAdministrador: number;
+      nombre: string;
+    }[]
+  >([]);
+  const [regionales, setRegionales] = useState<
+    {
+      idUbicacion: number;
+      descripcion: string;
+    }[]
+  >([]);
   const [location, setLocation] = useState<
     { lat: number; lng: number } | undefined
   >(undefined);
-  // const [regionales, setRegionales] = useState([]);
-  // const [ciudades, setCiudades] = useState([])
+
+  const [ciudades, setCiudades] = useState<
+    {
+      idUbicacion: number;
+      descripcion: string;
+    }[]
+  >([]);
+  const [caracteristicas, setCaracteristicas] = useState<
+    {
+      idCaracteristica: number;
+      nombre: string;
+    }[]
+  >([]);
 
   const {
     register,
@@ -76,16 +104,11 @@ const NewSede = () => {
       city: "Seleccionar",
       loyalty: false,
       fullTime: false,
-      tariff: [
-        {
-          id: "0",
-          name: "Carro",
-          price: "",
-          parkingSpaces: "",
-        },
-      ],
+      tariff: [],
     },
   });
+
+  const idRegional = watch("regional");
 
   const registeredLocation = {
     lat: watch("lat"),
@@ -121,8 +144,17 @@ const NewSede = () => {
     });
 
     setLoading(true);
-    console.log(data);
-    setLoading(false);
+    registerSede(data).then(({ success, error, message }) => {
+      setLoading(false);
+      const notification = {
+        id: uuid(),
+        title: success ? "Éxito" : "Error",
+        message: message || error || "Error al registrar la sede",
+        type: success ? "success" : ("error" as "success" | "error"),
+        autoDismiss: 5000,
+      };
+      dispatch(newNotification(notification));
+    });
   };
 
   const registerLocation = () => {
@@ -164,10 +196,37 @@ const NewSede = () => {
   };
 
   useEffect(() => {
-    // getRegionales().then((res) => {
-    //   console.log(res);
-    // });
+    setLoading(true);
+    getAdmins().then(({ admins }) => {
+      setAdmins(admins);
+    });
+    getRegionales().then(({ regionales }) => {
+      setLoading(false);
+      setRegionales(regionales);
+    });
   }, []);
+
+  useEffect(() => {
+    if (idRegional !== "Seleccionar") {
+      setLoadingRegionales(true);
+      getRegional(idRegional).then(
+        ({ caracteristicas, ciudades, tiposParqueaderos }) => {
+          setCaracteristicas(caracteristicas);
+          setCiudades(ciudades);
+          setLoadingRegionales(false);
+          setValue(
+            "tariff",
+            tiposParqueaderos.map(({ idTipo_Parqueadero, nombre }) => ({
+              id: String(idTipo_Parqueadero),
+              name: nombre,
+              price: "",
+              parkingSpaces: "",
+            }))
+          );
+        }
+      );
+    }
+  }, [idRegional, setValue]);
 
   return (
     <Box
@@ -212,8 +271,11 @@ const NewSede = () => {
           }}
         >
           <MenuItem value={"Seleccionar"}>Seleccionar</MenuItem>
-          <MenuItem value={"pedidos"}>Pedidos</MenuItem>
-          <MenuItem value={"bodegas"}>Bodegas</MenuItem>
+          {admins.map(({ idAdministrador, nombre }) => (
+            <MenuItem key={idAdministrador} value={idAdministrador}>
+              {nombre}
+            </MenuItem>
+          ))}
         </TextField>
 
         <Box
@@ -345,14 +407,17 @@ const NewSede = () => {
               }}
             >
               <MenuItem value={"Seleccionar"}>Seleccionar</MenuItem>
-              <MenuItem value={"pedidos"}>Pedidos</MenuItem>
-              <MenuItem value={"bodegas"}>Bodegas</MenuItem>
+              {regionales.map(({ idUbicacion, descripcion }) => (
+                <MenuItem key={idUbicacion} value={idUbicacion}>
+                  {descripcion}
+                </MenuItem>
+              ))}
             </TextField>
 
             <TextField
               fullWidth
               select
-              disabled={loading}
+              disabled={loadingRegionales}
               label="Ciudad*"
               error={!!errors.city}
               sx={{ mb: 2, width: "50%" }}
@@ -375,14 +440,21 @@ const NewSede = () => {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <FmdGoodIcon />
+                    {loadingRegionales ? (
+                      <CircularProgress size={25} />
+                    ) : (
+                      <FmdGoodIcon />
+                    )}
                   </InputAdornment>
                 ),
               }}
             >
               <MenuItem value={"Seleccionar"}>Seleccionar</MenuItem>
-              <MenuItem value={"pedidos"}>Pedidos</MenuItem>
-              <MenuItem value={"bodegas"}>Bodegas</MenuItem>
+              {ciudades.map(({ idUbicacion, descripcion }) => (
+                <MenuItem key={idUbicacion} value={idUbicacion}>
+                  {descripcion}{" "}
+                </MenuItem>
+              ))}
             </TextField>
           </Box>
         </Box>
@@ -491,9 +563,14 @@ const NewSede = () => {
               <Select
                 labelId="characteristic-select"
                 multiple
+                disabled={loadingRegionales}
                 startAdornment={
                   <InputAdornment position="start">
-                    <LocalParkingIcon />
+                    {loadingRegionales ? (
+                      <CircularProgress size={25} />
+                    ) : (
+                      <LocalParkingIcon />
+                    )}
                   </InputAdornment>
                 }
                 {...field}
@@ -501,8 +578,10 @@ const NewSede = () => {
                 renderValue={(selected) => (
                   <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                     {selected.map((value, index) => {
-                      const { name } = JSON.parse(value) as ICharacteristic;
-                      return <Chip key={index} label={name} color="primary" />;
+                      const { nombre } = JSON.parse(value) as ICharacteristic;
+                      return (
+                        <Chip key={index} label={nombre} color="primary" />
+                      );
                     })}
                   </Box>
                 )}
@@ -512,28 +591,20 @@ const NewSede = () => {
                 error={!!errors.characteristics}
                 input={<OutlinedInput label="Seleccione las características" />}
               >
-                {[
-                  {
-                    id: 1,
-                    name: "ok1",
-                  },
-                  {
-                    id: 2,
-                    name: "ok2",
-                  },
-                  {
-                    id: 3,
-                    name: "ok3",
-                  },
-                ].map((characteristic, index) => (
-                  <MenuItem key={index} value={JSON.stringify(characteristic)}>
+                {caracteristicas.map(({ idCaracteristica, nombre }, index) => (
+                  <MenuItem
+                    key={index}
+                    value={JSON.stringify({ idCaracteristica, nombre })}
+                  >
                     <Checkbox
                       checked={field.value.some((item) => {
-                        const { id } = JSON.parse(item) as ICharacteristic;
-                        return id === characteristic.id;
+                        const { idCaracteristica: id } = JSON.parse(
+                          item
+                        ) as ICharacteristic;
+                        return id === idCaracteristica;
                       })}
                     />
-                    <ListItemText primary={characteristic.name} />
+                    <ListItemText primary={nombre} />
                   </MenuItem>
                 ))}
               </Select>

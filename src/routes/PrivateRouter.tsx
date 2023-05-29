@@ -14,8 +14,7 @@ const PrivateRouter = () => {
   const [redirect, setRedirect] = useState(false);
 
   const { logged } = useAppSelector((state) => state.auth);
-  const { GetUser, status } = useAuth();
-  console.log(status.updatePassword);
+  const { GetUser } = useAuth();
 
   const { request } = useAppSelector((state) => state.ui);
   const { loading } = request;
