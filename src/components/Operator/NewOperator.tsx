@@ -5,10 +5,7 @@ import {
   InputAdornment,
   Button,
 } from "@mui/material";
-import { useState, useEffect } from "react";
-
-// React Router DOM
-import { useParams } from "react-router-dom";
+import { useState } from "react";
 
 // Components
 import { OperatorSkeleton } from "../../components";
@@ -21,40 +18,24 @@ import { IOperator } from "../../interfaces";
 
 // Icons
 import SwitchAccountIcon from "@mui/icons-material/SwitchAccount";
-import EditIcon from "@mui/icons-material/Edit";
 import ContactMailIcon from '@mui/icons-material/ContactMail';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import BadgeIcon from '@mui/icons-material/Badge';
 
-const Operator = () => {
-  const { id } = useParams<{ id: string }>();
+const NewOperator = () => {
   const [loading, setLoading] = useState(false);
-
-  const [edit, setEdit] = useState(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IOperator>({
-    defaultValues: {
-      id: 1002356897,
-      email: "correo@gmail.com",
-      lastName: "Pérez",
-      name: "Pepe",
-      user: "pepeperez",
-    },
-  });
+  } = useForm<IOperator>({});
 
-  const handleUpdate = (data: IOperator) => {
-    console.log(data);
-  };
-
-  useEffect(() => {
+  const handleRegister = (data: IOperator) => {
     setLoading(true);
-    console.log(id);
+    console.log(data);
     setLoading(false);
-  }, [id]);
+  };
 
   if (loading) return <OperatorSkeleton />;
 
@@ -64,28 +45,10 @@ const Operator = () => {
         p: 2,
       }}
     >
-      <Box
-        sx={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
-        <Typography variant="body1" fontWeight={600}>
-          Datos del operario #{id} de la sede {"xd"}
-        </Typography>
-        <Button
-          variant="contained"
-          startIcon={<EditIcon />}
-          size="small"
-          sx={{ mb: 2 }}
-          onClick={() => setEdit(!edit)}
-          color={edit ? "error" : "primary"}
-        >
-          {edit ? "Cancelar" : "Editar"}
-        </Button>
-      </Box>
-      <form onSubmit={handleSubmit(handleUpdate)}>
+      <Typography variant="body1" fontWeight={600}>
+        Registar un nuevo operario
+      </Typography>
+      <form onSubmit={handleSubmit(handleRegister)}>
         <TextField
           disabled={loading}
           fullWidth
@@ -94,9 +57,7 @@ const Operator = () => {
           label="Cédula*"
           sx={{ mb: 2 }}
           error={!!errors.id}
-          helperText={
-            edit ? (errors.id ? errors.id.message : "Escribe la cédula...") : ""
-          }
+          helperText={errors.id ? errors.id.message : "Escribe la cédula..."}
           {...register("id", {
             required: "La cédula es obligatoria",
           })}
@@ -106,7 +67,6 @@ const Operator = () => {
                 <SwitchAccountIcon />
               </InputAdornment>
             ),
-            readOnly: !edit,
           }}
         />
         <Box
@@ -124,11 +84,7 @@ const Operator = () => {
             sx={{ mb: 2, width: "49%" }}
             error={!!errors.name}
             helperText={
-              edit
-                ? errors.name
-                  ? errors.name.message
-                  : "Escribe el nombre..."
-                : ""
+              errors.name ? errors.name.message : "Escribe el nombre..."
             }
             {...register("name", {
               required: "El nombre es obligatorio",
@@ -139,7 +95,6 @@ const Operator = () => {
                   <BadgeIcon />
                 </InputAdornment>
               ),
-              readOnly: !edit,
             }}
           />
           <TextField
@@ -151,11 +106,9 @@ const Operator = () => {
             sx={{ mb: 2, width: "49%" }}
             error={!!errors.lastName}
             helperText={
-              edit
-                ? errors.lastName
-                  ? errors.lastName.message
-                  : "Escribe el apellido..."
-                : ""
+              errors.lastName
+                ? errors.lastName.message
+                : "Escribe el apellido..."
             }
             {...register("lastName", {
               required: "El apellido es obligatorio",
@@ -166,7 +119,6 @@ const Operator = () => {
                   <BadgeIcon />
                 </InputAdornment>
               ),
-              readOnly: !edit,
             }}
           />
         </Box>
@@ -179,11 +131,7 @@ const Operator = () => {
           sx={{ mb: 2 }}
           error={!!errors.user}
           helperText={
-            edit
-              ? errors.user
-                ? errors.user.message
-                : "Escribe el usuario..."
-              : ""
+            errors.user ? errors.user.message : "Escribe el usuario..."
           }
           {...register("user", {
             required: "El usuario es obligatorio",
@@ -194,7 +142,6 @@ const Operator = () => {
                 <AdminPanelSettingsIcon />
               </InputAdornment>
             ),
-            readOnly: !edit,
           }}
         />
         <TextField
@@ -206,11 +153,9 @@ const Operator = () => {
           sx={{ mb: 2 }}
           error={!!errors.email}
           helperText={
-            edit
-              ? errors.email
-                ? errors.email.message
-                : "Escribe el correo electrónico..."
-              : ""
+            errors.email
+              ? errors.email.message
+              : "Escribe el correo electrónico..."
           }
           {...register("email", {
             required: "El correo electrónico es obligatorio",
@@ -223,17 +168,14 @@ const Operator = () => {
                 <ContactMailIcon />
               </InputAdornment>
             ),
-            readOnly: !edit,
           }}
         />
-        {edit && (
-          <Button type="submit" color="success" variant="contained" fullWidth>
-            Actualizar
-          </Button>
-        )}
+        <Button type="submit" color="success" variant="contained" fullWidth>
+          Registrar
+        </Button>
       </form>
     </Box>
   );
 };
 
-export { Operator };
+export { NewOperator };

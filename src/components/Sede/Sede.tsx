@@ -9,7 +9,6 @@ import { SedeSkeleton } from ".";
 
 const Sede = () => {
   const { idSede } = useParams<{ idSede: string }>();
-
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {

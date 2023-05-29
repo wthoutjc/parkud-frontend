@@ -1,4 +1,5 @@
 import { Box, IconButton, Tooltip, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 // Interfaces
 import { IContextTable } from "../../../interfaces";
@@ -10,11 +11,13 @@ interface Props {
   title: string;
   numSelected: number;
   selected: string;
-  to?: string;
+  to: string;
   context: IContextTable;
 }
 
-const TableToolbar = ({ title, numSelected, context }: Props) => {
+const TableToolbar = ({ title, numSelected, to, selected, context }: Props) => {
+  const navigate = useNavigate();
+
   return (
     <Box
       sx={{
@@ -59,7 +62,10 @@ const TableToolbar = ({ title, numSelected, context }: Props) => {
             >
               {context.read.enabled && (
                 <Tooltip title="Ver">
-                  <IconButton size="small" onClick={() => undefined}>
+                  <IconButton
+                    size="small"
+                    onClick={() => navigate(`${to}/${selected}`)}
+                  >
                     <InfoIcon fontSize={"medium"} color="secondary" />
                   </IconButton>
                 </Tooltip>

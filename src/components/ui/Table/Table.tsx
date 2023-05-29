@@ -36,7 +36,7 @@ interface Props {
   page?: number;
   setPage?: (page: number) => void;
   totalData?: number;
-  to?: string;
+  to: string;
 }
 
 export function Table({
