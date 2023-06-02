@@ -21,7 +21,7 @@ import {
 } from "@mui/material";
 
 // Interfaces
-import { ICharacteristic, ISede } from "../../interfaces";
+import { ICharacteristic, ISede, ITableData } from "../../interfaces";
 
 // React Hook Form
 import { Controller, useForm } from "react-hook-form";
@@ -31,17 +31,16 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FmdGoodIcon from "@mui/icons-material/FmdGood";
 import LocalParkingIcon from "@mui/icons-material/LocalParking";
-import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 
 // React Router DOM
 import { useNavigate } from "react-router-dom";
 
 // Services
 import {
-  getAdmins,
   getRegional,
   getRegionales,
-  registerSede,
+  getSedeAdmin,
+  updateSede,
 } from "../../services";
 
 // uuid
@@ -52,22 +51,18 @@ import { useAppDispatch } from "../../hooks";
 import { newNotification } from "../../reducers";
 
 // Components
-import { SelectLocation, TableTarifa } from "..";
+import { SedeSkeleton, SelectLocation, TableTarifa } from "..";
 
-const NewSede = () => {
+const UpdateSede = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [loadingRegionales, setLoadingRegionales] = useState(false);
   const [render, setRender] = useState(false);
+  const [tariff, setTariff] = useState<null | ITableData[]>(null);
+  const [idSede, setIdSede] = useState<null | number>(null);
 
-  const [admins, setAdmins] = useState<
-    {
-      idAdministrador: number;
-      nombre: string;
-    }[]
-  >([]);
   const [regionales, setRegionales] = useState<
     {
       idUbicacion: number;
@@ -98,18 +93,7 @@ const NewSede = () => {
     watch,
     control,
     formState: { errors },
-  } = useForm<ISede>({
-    defaultValues: {
-      idAdmin: "Seleccionar",
-      regional: "Seleccionar",
-      city: "Seleccionar",
-      loyalty: false,
-      fullTime: false,
-      tariff: [],
-      startTime: "00:00",
-      endTime: "00:00",
-    },
-  });
+  } = useForm<ISede>();
 
   const idRegional = watch("regional");
 
@@ -118,7 +102,7 @@ const NewSede = () => {
     lng: watch("lng"),
   };
 
-  const handleNewSede = async (data: ISede) => {
+  const handleUpdateSede = async (data: ISede) => {
     if (!registeredLocation.lat || !registeredLocation.lng) {
       const notification = {
         id: uuid(),
@@ -132,8 +116,8 @@ const NewSede = () => {
     }
 
     watch("tariff").forEach((tariff) => {
-      const { name, price, parkingSpaces } = tariff;
-      if (!price || !parkingSpaces) {
+      const { name, price } = tariff;
+      if (!price) {
         const notification = {
           id: uuid(),
           title: "Error",
@@ -146,8 +130,21 @@ const NewSede = () => {
       }
     });
 
+    if (!idSede) {
+      const notification = {
+        id: uuid(),
+        title: "Error",
+        message: "Error al registrar la sede",
+        type: "error" as "success" | "error",
+        autoDismiss: 5000,
+      };
+      dispatch(newNotification(notification));
+      return navigate("/home");
+    }
+
     setLoading(true);
-    registerSede(data).then(({ success, error, message }) => {
+    
+    updateSede(data, idSede).then(({ success, error, message }) => {
       setLoading(false);
       const notification = {
         id: uuid(),
@@ -200,37 +197,87 @@ const NewSede = () => {
   };
 
   useEffect(() => {
-    setLoading(true);
-    getAdmins().then(({ admins }) => {
-      setAdmins(admins);
-    });
-    getRegionales().then(({ regionales }) => {
-      setLoading(false);
-      setRegionales(regionales);
-    });
-  }, []);
-
-  useEffect(() => {
-    if (idRegional !== "Seleccionar") {
+    if (idRegional !== "Seleccionar" && idRegional !== undefined) {
       setLoadingRegionales(true);
       getRegional(String(idRegional)).then(
         ({ caracteristicas, ciudades, tiposParqueaderos }) => {
           setCaracteristicas(caracteristicas);
           setCiudades(ciudades);
           setLoadingRegionales(false);
-          setValue(
-            "tariff",
-            tiposParqueaderos.map(({ idTipo_Parqueadero, nombre }) => ({
-              id: String(idTipo_Parqueadero),
-              name: nombre,
-              price: "",
-              parkingSpaces: "",
-            }))
-          );
+          if (!tariff) {
+            setValue(
+              "tariff",
+              tiposParqueaderos.map(({ idTipo_Parqueadero, nombre }) => ({
+                id: String(idTipo_Parqueadero),
+                name: nombre,
+                price: "",
+                parkingSpaces: "",
+              }))
+            );
+          }
         }
       );
     }
-  }, [idRegional, setValue]);
+  }, [idRegional, setValue, tariff]);
+
+  useEffect(() => {
+    setLoading(true);
+    getRegionales().then(({ success, regionales }) => {
+      if (!success) {
+        const notification = {
+          id: uuid(),
+          title: "Error",
+          message: "Error al cargar las regionales",
+          type: "error" as "success" | "error",
+          autoDismiss: 5000,
+        };
+        dispatch(newNotification(notification));
+        return navigate("/home");
+      }
+      setRegionales(regionales);
+      getSedeAdmin().then(({ sede, caracteristicas, tiposParqueaderos }) => {
+        if (sede) {
+          setIdSede(sede.idSede);
+          setValue("name", sede.nombre);
+          setValue("lat", sede.latitud);
+          setValue("lng", sede.longitud);
+          setValue("loyalty", sede.fidelizacion === 1);
+          setValue("regional", sede.regional.idUbicacion);
+          setValue("fullTime", sede.tiempoCompleto === 1);
+          setValue("startTime", sede.horaInicio);
+          setValue("endTime", sede.horaFin);
+          setLocation({
+            lat: sede.latitud,
+            lng: sede.longitud,
+          });
+          setCaracteristicas(caracteristicas);
+          setValue(
+            "characteristics",
+            sede.caracteristicas_sel.map((item) => JSON.stringify(item))
+          );
+          setValue("city", sede.ciudad.idUbicacion);
+          const newTariff = sede.tarifas
+            .flatMap((tarifa) =>
+              tiposParqueaderos.flatMap((tipo) => {
+                if (tarifa.idTipo_Parqueadero === tipo.idTipo_Parqueadero)
+                  return {
+                    id: String(tipo.idTipo_Parqueadero),
+                    name: String(tipo.nombre),
+                    price: String(tarifa.valor),
+                    idTarifa: tarifa.idTarifa,
+                  };
+              })
+            )
+            .filter((item) => item !== undefined) as ITableData[];
+          setTariff(newTariff);
+          setValue("tariff", newTariff);
+        }
+        setLoading(false);
+      });
+    });
+  }, [setValue, dispatch, navigate]);
+
+  if (loading) return <SedeSkeleton />;
 
   return (
     <Box
@@ -244,44 +291,9 @@ const NewSede = () => {
       }}
     >
       <Typography variant="body1" sx={{ mb: 2 }} fontWeight={800}>
-        Registrar: Nueva sede
+        Actualizar sede
       </Typography>
-      <form onSubmit={handleSubmit(handleNewSede)}>
-        <TextField
-          disabled={loading}
-          fullWidth
-          select
-          placeholder="Ej Pepito Pérez"
-          label="Administrador*"
-          error={!!errors.idAdmin}
-          sx={{ mb: 2 }}
-          helperText={
-            errors.idAdmin
-              ? errors.idAdmin.message
-              : "Selecciona un administrador para esta sede"
-          }
-          {...register("idAdmin", {
-            required: "El administrador es obligatorio",
-            validate: (value) =>
-              value !== "Seleccionar" || "Selecciona una administrador",
-          })}
-          value={watch("idAdmin")}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SupervisedUserCircleIcon />
-              </InputAdornment>
-            ),
-          }}
-        >
-          <MenuItem value={"Seleccionar"}>Seleccionar</MenuItem>
-          {admins.map(({ idAdministrador, nombre }) => (
-            <MenuItem key={idAdministrador} value={idAdministrador}>
-              {nombre}
-            </MenuItem>
-          ))}
-        </TextField>
-
+      <form onSubmit={handleSubmit(handleUpdateSede)}>
         <Box
           sx={{
             display: "flex",
@@ -418,47 +430,49 @@ const NewSede = () => {
               ))}
             </TextField>
 
-            <TextField
-              fullWidth
-              select
-              disabled={loadingRegionales}
-              label="Ciudad*"
-              error={!!errors.city}
-              sx={{ mb: 2, width: "50%" }}
-              helperText={
-                errors.city
-                  ? errors.city.message
-                  : `Selecciona la ciudad de ${
-                      watch("regional") === "Seleccionar"
-                        ? "la regional"
-                        : watch("regional")
-                    }`
-              }
-              {...register("city", {
-                required: "La regional es obligatoria",
-                validate: (value) =>
-                  value !== "Seleccionar" || `Selecciona una ciudad`,
-              })}
-              value={watch("city")}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    {loadingRegionales ? (
-                      <CircularProgress size={25} />
-                    ) : (
-                      <FmdGoodIcon />
-                    )}
-                  </InputAdornment>
-                ),
-              }}
-            >
-              <MenuItem value={"Seleccionar"}>Seleccionar</MenuItem>
-              {ciudades.map(({ idUbicacion, descripcion }) => (
-                <MenuItem key={idUbicacion} value={idUbicacion}>
-                  {descripcion}{" "}
-                </MenuItem>
-              ))}
-            </TextField>
+            {ciudades.length > 0 && (
+              <TextField
+                fullWidth
+                select
+                disabled={loadingRegionales}
+                label="Ciudad*"
+                error={!!errors.city}
+                sx={{ mb: 2, width: "50%" }}
+                helperText={
+                  errors.city
+                    ? errors.city.message
+                    : `Selecciona la ciudad de ${
+                        watch("regional") === "Seleccionar"
+                          ? "la regional"
+                          : watch("regional")
+                      }`
+                }
+                {...register("city", {
+                  required: "La regional es obligatoria",
+                  validate: (value) =>
+                    value !== "Seleccionar" || `Selecciona una ciudad`,
+                })}
+                value={watch("city")}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      {loadingRegionales ? (
+                        <CircularProgress size={25} />
+                      ) : (
+                        <FmdGoodIcon />
+                      )}
+                    </InputAdornment>
+                  ),
+                }}
+              >
+                <MenuItem value={"Seleccionar"}>Seleccionar</MenuItem>
+                {ciudades.map(({ idUbicacion, descripcion }) => (
+                  <MenuItem key={idUbicacion} value={idUbicacion}>
+                    {descripcion}{" "}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
           </Box>
         </Box>
 
@@ -622,9 +636,10 @@ const NewSede = () => {
 
         <Box sx={{ mb: 2 }}>
           <TableTarifa
+            quitIdTariff={true}
             loading={loading}
             title="Digita las tarifas"
-            columns={["#", "Tipo de vehículo", "Precio", "Cupos"]}
+            columns={["#", "Tipo de vehículo", "Precio"]}
             data={watch("tariff")}
             dataEdit={watch("tariff")}
             setDataEdit={() => setValue("tariff", watch("tariff"))}
@@ -639,7 +654,7 @@ const NewSede = () => {
           color="success"
           sx={{ mb: 2 }}
         >
-          Registrar
+          Actualizar
         </Button>
       </form>
       {render && (
@@ -731,4 +746,4 @@ const NewSede = () => {
   );
 };
 
-export { NewSede };
+export { UpdateSede };

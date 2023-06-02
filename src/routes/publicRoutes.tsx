@@ -2,7 +2,7 @@
 import { IRoute } from "../interfaces";
 
 // Components
-import { Layout, Auth, LandingPage, Admin, Operator } from "../components";
+import { Layout, Auth, LandingPage } from "../components";
 
 const publicRoutes: IRoute[] = [
   {
@@ -21,18 +21,6 @@ const publicRoutes: IRoute[] = [
     path: "/signup",
     name: "SignUp",
     element: <Layout children={<Auth type={"signup"} />} />,
-    exact: true,
-  },
-  {
-    path: "/temp-admin",
-    name: "Temporal Admin",
-    element: <Layout children={<Admin />} />,
-    exact: true,
-  },
-  {
-    path: "/temp-operator/:id",
-    name: "Temporal Operator",
-    element: <Layout children={<Operator />} />,
     exact: true,
   },
 ];

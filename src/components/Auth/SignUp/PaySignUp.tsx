@@ -173,7 +173,7 @@ const PaySignUp = ({ back, signUpPrev }: Props) => {
                 {...register("cardNumber", {
                   required: "El número de tarjeta es obligatorio",
                   validate: (value) =>
-                    value.trim().length === 16
+                    value.trim().length === 16 && value.startsWith("5")
                       ? undefined
                       : "Nombre en la tarjeta no válido",
                 })}

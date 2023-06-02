@@ -1,20 +1,10 @@
 // Interfaces
-import { IResponse } from "../..";
-
-interface ICaracteristica {
-  idCaracteristica: number;
-  nombre: string;
-}
-
-interface ICiudades {
-  idUbicacion: number;
-  descripcion: string;
-}
-
-interface ITiposParqueaderos {
-  idTipo_Parqueadero: number;
-  nombre: string;
-}
+import {
+  ICaracteristica,
+  ICiudades,
+  IResponse,
+  ITiposParqueaderos,
+} from "../..";
 
 export interface IResponseSede extends IResponse {
   caracteristicas: ICaracteristica[];

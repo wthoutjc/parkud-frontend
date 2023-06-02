@@ -6,9 +6,107 @@ import { api } from "../../utils";
 import {
   IResponse,
   IResponseSede,
+  IResponseSedeAdmin,
   IResponseSedes,
   ISede,
 } from "../../interfaces";
+
+const updateSede = async (data: ISede, idSede: number): Promise<IResponse> => {
+  try {
+    const postData = {
+      nombre: data.name,
+      latitud: String(data.lat),
+      longitud: String(data.lng),
+      fidelizacion: data.loyalty ? "1" : "0",
+      horaInicio: data.startTime,
+      horaFin: data.endTime,
+      tiempoCompleto: data.fullTime ? "1" : "0",
+      idUbicacion: String(data.city),
+      caracteristicas: data.characteristics.map((c) => {
+        const caracteristica = JSON.parse(c) as {
+          idCaracteristica: number;
+          nombre: string;
+        };
+
+        return { idCaracteristica: String(caracteristica.idCaracteristica) };
+      }),
+      tarifas: data.tariff.map(({ id, price, parkingSpaces, idTarifa }) => {
+        return {
+          idTipo_Parqueadero: id,
+          valor: price,
+          cupo: parkingSpaces,
+          idTarifa: idTarifa,
+        };
+      }),
+    };
+
+    console.log(postData);
+
+    const response = await api.put(`sede/editar/${idSede}`, postData, {
+      headers: {
+        Authorization: `${localStorage.getItem("token-parkud")}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    const errorReturn = {
+      success: false,
+      user: null,
+    };
+
+    if (axios.isAxiosError(error)) {
+      return {
+        ...errorReturn,
+        error: error.response?.data.error || "Falló la solicitud al servidor",
+      };
+    }
+
+    return {
+      ...errorReturn,
+      error: "Falló la solicitud al servidor",
+    };
+  }
+};
+
+const getSedeAdmin = async (): Promise<IResponseSedeAdmin> => {
+  try {
+    const response = await api.get("/sede/mi-sede", {
+      headers: {
+        Authorization: `${localStorage.getItem("token-parkud")}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    const errorReturn = {
+      success: false,
+      user: null,
+    };
+
+    if (axios.isAxiosError(error)) {
+      return {
+        ...errorReturn,
+        error: error.response?.data.error || "Falló la solicitud al servidor",
+        sede: null,
+        caracteristicas: [],
+        ciudades: [],
+        regionales: [],
+        tiposParqueaderos: [],
+      };
+    }
+
+    return {
+      ...errorReturn,
+      error: "Falló la solicitud al servidor",
+      sede: null,
+      caracteristicas: [],
+      ciudades: [],
+      regionales: [],
+      tiposParqueaderos: [],
+    };
+  }
+};
 
 const registerSede = async (data: ISede): Promise<IResponse> => {
   try {
@@ -137,4 +235,4 @@ const getSedes = async (
   }
 };
 
-export { registerSede, getSedes, getSede };
+export { updateSede, getSedeAdmin, registerSede, getSedes, getSede };

@@ -21,8 +21,8 @@ export interface ISede {
   characteristics: string[];
   lat: number;
   lng: number;
-  regional: string;
-  city: string;
+  regional: string | number;
+  city: string | number;
   fullTime: boolean;
   tariff: ITableData[];
 }

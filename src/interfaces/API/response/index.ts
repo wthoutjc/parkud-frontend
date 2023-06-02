@@ -5,3 +5,8 @@ export * from "./responseUser";
 export * from "./responseSede";
 export * from "./responseAdmin";
 export * from "./responseRegional";
+export * from "./responseSedeAdmin";
+export * from "./tipoParqueaderos";
+export * from "./ciudad";
+export * from "./caracteristica";
+export * from "./regional";

@@ -7,11 +7,13 @@ const api = axios.create({
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-    // console.error(error.response);
-    // if (error.response.status === 401 || error.response.status === 422) {
-    //   console.error("Unauthorized");
-    //   // TODO:Logout
-    // }
+    if (
+      error.response.status === 401 ||
+      error.response.status === 422 ||
+      error.response.status === 500
+    ) {
+      console.error("[ERROR] Unauthorized");
+    }
     return Promise.reject(error);
   }
 );

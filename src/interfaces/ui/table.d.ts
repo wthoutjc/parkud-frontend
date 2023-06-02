@@ -15,5 +15,5 @@ export interface IContextTable {
 }
 
 export interface ITableData {
-  [key: string]: string;
+  [key: string]: string | number;
 }

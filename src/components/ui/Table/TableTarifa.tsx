@@ -13,6 +13,7 @@ import { ITableData } from "../../../interfaces";
 import { StyledTableRow } from "..";
 
 interface Props {
+  quitIdTariff?: boolean;
   title: string;
   columns: string[];
   data: ITableData[];
@@ -27,6 +28,7 @@ const TableTarifa = ({
   data,
   dataEdit,
   setDataEdit,
+  quitIdTariff,
 }: Props) => {
   const allKeys = data.reduce((acc, item) => {
     return new Set([...acc, ...Object.keys(item)]);
@@ -89,41 +91,77 @@ const TableTarifa = ({
                 tabIndex={-1}
                 className="table__no-selected"
               >
-                {columnsData?.map(({ label }, _index) => (
-                  <TableCell
-                    key={index + _index}
-                    style={{
-                      padding: 0,
-                    }}
-                  >
-                    {_index > 1 ? (
-                      <input
+                {quitIdTariff
+                  ? columnsData?.slice(0, 3).map(({ label }, _index) => (
+                      <TableCell
+                        key={index + _index}
                         style={{
-                          backgroundColor: "rgba(255, 255, 255, 0.028)",
-                          border: "none",
-                          padding: "1em",
-                          width: "100%",
+                          padding: 0,
                         }}
-                        type="number"
-                        value={row[label]}
-                        onChange={(e) => {
-                          const newData = [...dataEdit];
-                          newData[index][label] = e.target.value;
-                          setDataEdit(newData);
-                        }}
-                      />
-                    ) : (
-                      <Typography
-                        variant="body2"
-                        fontSize={14}
-                        fontWeight={600}
-                        sx={{ p: 2 }}
                       >
-                        {row[label]}
-                      </Typography>
-                    )}
-                  </TableCell>
-                ))}
+                        {_index > 1 ? (
+                          <input
+                            style={{
+                              backgroundColor: "rgba(255, 255, 255, 0.028)",
+                              border: "none",
+                              padding: "1em",
+                              width: "100%",
+                            }}
+                            type="number"
+                            value={row[label]}
+                            onChange={(e) => {
+                              const newData = [...dataEdit];
+                              newData[index][label] = e.target.value;
+                              setDataEdit(newData);
+                            }}
+                          />
+                        ) : (
+                          <Typography
+                            variant="body2"
+                            fontSize={14}
+                            fontWeight={600}
+                            sx={{ p: 2 }}
+                          >
+                            {row[label]}
+                          </Typography>
+                        )}
+                      </TableCell>
+                    ))
+                  : columnsData?.map(({ label }, _index) => (
+                      <TableCell
+                        key={index + _index}
+                        style={{
+                          padding: 0,
+                        }}
+                      >
+                        {_index > 1 ? (
+                          <input
+                            style={{
+                              backgroundColor: "rgba(255, 255, 255, 0.028)",
+                              border: "none",
+                              padding: "1em",
+                              width: "100%",
+                            }}
+                            type="number"
+                            value={row[label]}
+                            onChange={(e) => {
+                              const newData = [...dataEdit];
+                              newData[index][label] = e.target.value;
+                              setDataEdit(newData);
+                            }}
+                          />
+                        ) : (
+                          <Typography
+                            variant="body2"
+                            fontSize={14}
+                            fontWeight={600}
+                            sx={{ p: 2 }}
+                          >
+                            {row[label]}
+                          </Typography>
+                        )}
+                      </TableCell>
+                    ))}
               </StyledTableRow>
             );
           })}

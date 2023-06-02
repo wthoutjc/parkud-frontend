@@ -1,25 +1,11 @@
 // Interfaces
-import { IResponse } from "../..";
-
-interface IRegional {
-  idUbicacion: number;
-  descripcion: string;
-}
-
-interface ICaracteristica {
-  idCaracteristica: number;
-  nombre: string;
-}
-
-interface ICiudades {
-  idUbicacion: number;
-  descripcion: string;
-}
-
-interface ITiposParqueaderos {
-  idTipo_Parqueadero: number;
-  nombre: string;
-}
+import {
+  ICaracteristica,
+  ICiudades,
+  IRegional,
+  IResponse,
+  IResponse,
+} from "../..";
 
 export interface IResponseRegionales extends IResponse {
   regionales: IRegional[];

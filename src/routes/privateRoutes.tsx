@@ -9,6 +9,8 @@ import {
   NewSede,
   SuperAdmin,
   Sede,
+  Operator,
+  UpdateSede,
 } from "../components";
 
 const privateRoutes: IRoute[] = [
@@ -31,6 +33,12 @@ const privateRoutes: IRoute[] = [
     exact: true,
   },
   {
+    path: "/update-sede",
+    name: "Nueva sede",
+    element: <AuthLayout children={<UpdateSede />} />,
+    exact: true,
+  },
+  {
     path: "/new-administrador",
     name: "NewAdmin",
     element: <AuthLayout children={<NewAdmin />} />,
@@ -40,6 +48,12 @@ const privateRoutes: IRoute[] = [
     path: "/sede/:idSede",
     name: "Sede",
     element: <AuthLayout children={<Sede />} />,
+    exact: true,
+  },
+  {
+    path: "/operator/:id",
+    name: "Operator",
+    element: <AuthLayout children={<Operator />} />,
     exact: true,
   },
 ];

@@ -17,7 +17,7 @@ import Patterns from "../../styles/img/Patterns.png";
 const LandingPage = () => {
   return (
     <>
-      <section id="bienvenido" className="welcome">
+      <section id="bienvenido" className="animate__animated animate__fadeIn welcome">
         <Box
           sx={{
             width: "100%",

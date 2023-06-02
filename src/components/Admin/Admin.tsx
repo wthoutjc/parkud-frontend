@@ -1,9 +1,43 @@
-import { Box, Divider, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import {
+  Box,
+  Button,
+  Divider,
+  IconButton,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 
 // Components
-import { Table } from "../../components";
+import { AdminSkeleton, SedeAdmin, Table } from "../../components";
+
+// Services
+import { getSedeAdmin } from "../../services";
+
+// Interfaces
+import { ISedeAdminAPI } from "../../interfaces";
+
+// Icons
+import EditIcon from "@mui/icons-material/Edit";
+import AddIcon from "@mui/icons-material/Add";
 
 const Admin = () => {
+  const [loading, setLoading] = useState(false);
+  const [sedeAdmin, setSedeAdmin] = useState<null | ISedeAdminAPI>(null);
+
+  const [render, setRender] = useState(1);
+
+  useEffect(() => {
+    setLoading(true);
+    getSedeAdmin().then(({ sede }) => {
+      setLoading(false);
+      setSedeAdmin(sede);
+    });
+  }, []);
+
+  if (loading || !sedeAdmin) return <AdminSkeleton />;
+
   return (
     <Box
       sx={{
@@ -11,20 +45,44 @@ const Admin = () => {
         flexDirection: "column",
       }}
     >
-      <Typography variant="body1" fontWeight={800}>
-        Sede
-      </Typography>
-      <Box sx={{ mb: 1 }}>
-        <Typography variant="body2">Algunos datos aquí</Typography>
+      <Box
+        sx={{
+          display: "flex",
+          width: "100%",
+          justifyContent: "space-between",
+        }}
+      >
+        <Typography variant="body1" fontWeight={800}>
+          Sede
+        </Typography>
+        <Tooltip title="Editar">
+          <Link to="/update-sede">
+            <IconButton size="small">
+              <EditIcon fontSize="small" />
+            </IconButton>
+          </Link>
+        </Tooltip>
       </Box>
-      <Divider sx={{ mb: 2 }} />
+      <SedeAdmin render={render} setRender={setRender} sedeAdmin={sedeAdmin} />
+      <Divider sx={{ mt: 1, mb: 1 }} />
       <Box>
-        <Typography variant="body1" fontWeight={800} sx={{ mb: 2 }}>
+        <Typography variant="body1" fontWeight={800} sx={{ mb: 1 }}>
           Operarios
         </Typography>
+        <Link to="/new-operator">
+          <Button
+            variant="contained"
+            color="success"
+            sx={{ mb: 1 }}
+            startIcon={<AddIcon />}
+          >
+            Registrar operario
+          </Button>
+        </Link>
+
         <Table
           loading={false}
-          to="/temp-operator"
+          to="/operator"
           title="Operarios"
           columns={["Cédula", "Nombre"]}
           data={[
