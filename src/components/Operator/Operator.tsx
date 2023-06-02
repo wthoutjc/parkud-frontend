@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
@@ -5,7 +6,7 @@ import {
   InputAdornment,
   Button,
 } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 // React Router DOM
 import { useParams } from "react-router-dom";
@@ -22,14 +23,26 @@ import { IOperator } from "../../interfaces";
 // Icons
 import SwitchAccountIcon from "@mui/icons-material/SwitchAccount";
 import EditIcon from "@mui/icons-material/Edit";
-import ContactMailIcon from '@mui/icons-material/ContactMail';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import BadgeIcon from '@mui/icons-material/Badge';
+import ContactMailIcon from "@mui/icons-material/ContactMail";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import BadgeIcon from "@mui/icons-material/Badge";
+import { getSedeAdmin, updateOperator } from "../../services";
+
+// uuid
+import { v4 as uuid } from "uuid";
+
+// Redux
+import { useAppDispatch } from "../../hooks";
+import { newNotification } from "../../reducers";
 
 const Operator = () => {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState(false);
 
+  const [idSede, setIdSede] = useState<null | number>(null);
   const [edit, setEdit] = useState(false);
 
   const {
@@ -47,14 +60,31 @@ const Operator = () => {
   });
 
   const handleUpdate = (data: IOperator) => {
-    console.log(data);
+    setLoading(true);
+    if (idSede)
+      updateOperator(data, idSede).then(({ success, error, message }) => {
+        setLoading(false);
+        const notification = {
+          id: uuid(),
+          title: success ? "Éxito" : "Error",
+          message: message || error || "Error al registrar la sede",
+          type: success ? "success" : ("error" as "success" | "error"),
+          autoDismiss: 5000,
+        };
+        dispatch(newNotification(notification));
+        return navigate("/home");
+      });
   };
 
   useEffect(() => {
     setLoading(true);
-    console.log(id);
-    setLoading(false);
-  }, [id]);
+    getSedeAdmin().then(({ sede }) => {
+      setLoading(false);
+      if (sede) {
+        setIdSede(sede.idSede);
+      }
+    });
+  }, []);
 
   if (loading) return <OperatorSkeleton />;
 

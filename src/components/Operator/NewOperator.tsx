@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -5,7 +7,6 @@ import {
   InputAdornment,
   Button,
 } from "@mui/material";
-import { useState } from "react";
 
 // Components
 import { OperatorSkeleton } from "../../components";
@@ -18,12 +19,26 @@ import { IOperator } from "../../interfaces";
 
 // Icons
 import SwitchAccountIcon from "@mui/icons-material/SwitchAccount";
-import ContactMailIcon from '@mui/icons-material/ContactMail';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import BadgeIcon from '@mui/icons-material/Badge';
+import ContactMailIcon from "@mui/icons-material/ContactMail";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import BadgeIcon from "@mui/icons-material/Badge";
+
+// Services
+import { getSedeAdmin, newOperator } from "../../services";
+
+// uuid
+import { v4 as uuid } from "uuid";
+
+// Redux
+import { useAppDispatch } from "../../hooks";
+import { newNotification } from "../../reducers";
 
 const NewOperator = () => {
+  const navigate = useNavigate();
+
+  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
+  const [idSede, setIdSede] = useState<null | number>(null);
 
   const {
     register,
@@ -33,9 +48,30 @@ const NewOperator = () => {
 
   const handleRegister = (data: IOperator) => {
     setLoading(true);
-    console.log(data);
-    setLoading(false);
+    if (idSede)
+      newOperator(data, idSede).then(({ success, error, message }) => {
+        setLoading(false);
+        const notification = {
+          id: uuid(),
+          title: success ? "Éxito" : "Error",
+          message: message || error || "Error al registrar la sede",
+          type: success ? "success" : ("error" as "success" | "error"),
+          autoDismiss: 5000,
+        };
+        dispatch(newNotification(notification));
+        return navigate("/home");
+      });
   };
+
+  useEffect(() => {
+    setLoading(true);
+    getSedeAdmin().then(({ sede }) => {
+      setLoading(false);
+      if (sede) {
+        setIdSede(sede.idSede);
+      }
+    });
+  }, []);
 
   if (loading) return <OperatorSkeleton />;
 
@@ -43,9 +79,10 @@ const NewOperator = () => {
     <Box
       sx={{
         p: 2,
+        width: "100%",
       }}
     >
-      <Typography variant="body1" fontWeight={600}>
+      <Typography variant="body1" fontWeight={600} sx={{ mb: 2 }}>
         Registar un nuevo operario
       </Typography>
       <form onSubmit={handleSubmit(handleRegister)}>
@@ -79,7 +116,7 @@ const NewOperator = () => {
             disabled={loading}
             fullWidth
             type="text"
-            placeholder="Ej JuTo123"
+            placeholder="Ej Juan"
             label="Nombre*"
             sx={{ mb: 2, width: "49%" }}
             error={!!errors.name}
@@ -148,7 +185,7 @@ const NewOperator = () => {
           disabled={loading}
           fullWidth
           type="text"
-          placeholder="Ej JuTo123"
+          placeholder="Ej some@outlook.com"
           label="Correo electrónico*"
           sx={{ mb: 2 }}
           error={!!errors.email}
