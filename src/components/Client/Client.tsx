@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box, IconButton, Paper } from "@mui/material";
+import { Box, Button, IconButton, Paper } from "@mui/material";
 
 // Components
 import { FindParking, Maps } from "../../components";
@@ -7,6 +7,7 @@ import { FindParking, Maps } from "../../components";
 // Icons
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import RotateLeftIcon from "@mui/icons-material/RotateLeft";
 
 // Interfaces
 import { ILocation, IResponseSedeClient } from "../../interfaces";
@@ -23,6 +24,12 @@ const Client = () => {
     setOpen(true);
     const sede = sedes.find((sede) => sede.idSede === idSede);
     if (sede) setSede(sede);
+  };
+
+  const handleReset = () => {
+    setSede(null);
+    setSedes([]);
+    setLocations([]);
   };
 
   useEffect(() => {
@@ -46,6 +53,25 @@ const Client = () => {
           position: "relative",
         }}
       >
+        {sedes.length > 0 && (
+          <Box
+            sx={{
+              position: "absolute",
+              zIndex: 1,
+              bottom: 0,
+              left: 0,
+            }}
+          >
+            <Button
+              variant="contained"
+              color="warning"
+              startIcon={<RotateLeftIcon />}
+              onClick={handleReset}
+            >
+              Limpiar filtros
+            </Button>
+          </Box>
+        )}
         {open && (
           <Box
             sx={{
