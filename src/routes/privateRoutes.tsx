@@ -13,6 +13,9 @@ import {
   UpdateSede,
   NewOperator,
   Reserva,
+  BlockedUsers,
+  UserTraceability,
+  GenerateReports,
 } from "../components";
 
 const privateRoutes: IRoute[] = [
@@ -68,6 +71,24 @@ const privateRoutes: IRoute[] = [
     path: "/reserva/:id",
     name: "Reserva",
     element: <AuthLayout children={<Reserva />} />,
+    exact: true,
+  },
+  {
+    path: "/blocked-users",
+    name: "Usuarios bloqueados",
+    element: <AuthLayout children={<BlockedUsers />} />,
+    exact: true,
+  },
+  {
+    path: "/user-traceability",
+    name: "Trazabilidad de usuarios",
+    element: <AuthLayout children={<UserTraceability />} />,
+    exact: true,
+  },
+  {
+    path: "/reports",
+    name: "Generar reportes",
+    element: <AuthLayout children={<GenerateReports />} />,
     exact: true,
   },
 ];
