@@ -10,3 +10,4 @@ export * from "./tipoParqueaderos";
 export * from "./ciudad";
 export * from "./caracteristica";
 export * from "./regional";
+export * from "./responseParqueaderos";

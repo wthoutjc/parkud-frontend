@@ -12,6 +12,7 @@ import {
   Operator,
   UpdateSede,
   NewOperator,
+  Reserva,
 } from "../components";
 
 const privateRoutes: IRoute[] = [
@@ -61,6 +62,12 @@ const privateRoutes: IRoute[] = [
     path: "/new-operator",
     name: "New Operator",
     element: <AuthLayout children={<NewOperator />} />,
+    exact: true,
+  },
+  {
+    path: "/reserva/:id",
+    name: "Reserva",
+    element: <AuthLayout children={<Reserva />} />,
     exact: true,
   },
 ];

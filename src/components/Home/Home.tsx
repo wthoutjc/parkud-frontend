@@ -6,8 +6,8 @@ import {
   Client,
   Admin,
   SuperAdmin,
-  Operator,
   HomeLayout,
+  HomeOperator,
 } from "../../components";
 
 const Home = () => {
@@ -16,7 +16,7 @@ const Home = () => {
 
   if (hierarchy === "A") return <HomeLayout children={<Admin />} />;
   else if (hierarchy === "C") return <HomeLayout children={<Client />} />;
-  else if (hierarchy === "O") return <HomeLayout children={<Operator />} />;
+  else if (hierarchy === "O") return <HomeLayout children={<HomeOperator />} />;
   else if (hierarchy === "S") return <HomeLayout children={<SuperAdmin />} />;
   else return <HomeLayout children={<Client />} />;
 };

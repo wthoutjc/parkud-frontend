@@ -3,54 +3,15 @@ import axios from "axios";
 import { api } from "../../utils";
 
 // Interfaces
-import { IOperator, IResponse, IStatusParqueaderos } from "../../interfaces";
+import { IResponse, IStatusReserva } from "../../interfaces";
 
-const getStatusParqueaderos = async (): Promise<IStatusParqueaderos> => {
-  try {
-    const response = await api.get("/reserva/estado-general", {
-      headers: {
-        Authorization: `${localStorage.getItem("token-parkud")}`,
-      },
-    });
-
-    return response.data;
-  } catch (error) {
-    const errorReturn = {
-      success: false,
-      user: null,
-    };
-
-    if (axios.isAxiosError(error)) {
-      return {
-        ...errorReturn,
-        error: error.response?.data.error || "Falló la solicitud al servidor",
-        parqueaderos: [],
-      };
-    }
-
-    return {
-      ...errorReturn,
-      error: "Falló la solicitud al servidor",
-      parqueaderos: [],
-    };
-  }
-};
-
-const updateOperator = async (
-  operator: IOperator,
-  idSede: number
-): Promise<IResponse> => {
+const sendReserva = async (correo: string): Promise<IResponse> => {
   try {
     const postData = {
-      nombre: String(operator.name),
-      apellido: String(operator.lastName),
-      correo: String(operator.email),
-      documentoIdentidad: String(operator.id),
-      usuario: String(operator.user),
-      idSede: String(idSede),
+      correo,
     };
 
-    const response = await api.post("/usuario/operario", postData, {
+    const response = await api.post(`reserva/enviar_registro`, postData, {
       headers: {
         Authorization: `${localStorage.getItem("token-parkud")}`,
       },
@@ -77,21 +38,9 @@ const updateOperator = async (
   }
 };
 
-const newOperator = async (
-  operator: IOperator,
-  idSede: number
-): Promise<IResponse> => {
+const registerOutput = async (id: string): Promise<IResponse> => {
   try {
-    const postData = {
-      nombre: String(operator.name),
-      apellido: String(operator.lastName),
-      correo: String(operator.email),
-      documentoIdentidad: String(operator.id),
-      usuario: String(operator.user),
-      idSede: String(idSede),
-    };
-
-    const response = await api.post("/usuario/operario", postData, {
+    const response = await api.post(`/reserva/${id}/salida`, null, {
       headers: {
         Authorization: `${localStorage.getItem("token-parkud")}`,
       },
@@ -118,4 +67,64 @@ const newOperator = async (
   }
 };
 
-export { getStatusParqueaderos, updateOperator, newOperator };
+const registerEntry = async (id: string): Promise<IResponse> => {
+  try {
+    const response = await api.post(`/reserva/${id}/entrada`, null, {
+      headers: {
+        Authorization: `${localStorage.getItem("token-parkud")}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    const errorReturn = {
+      success: false,
+      user: null,
+    };
+
+    if (axios.isAxiosError(error)) {
+      return {
+        ...errorReturn,
+        error: error.response?.data.error || "Falló la solicitud al servidor",
+      };
+    }
+
+    return {
+      ...errorReturn,
+      error: "Falló la solicitud al servidor",
+    };
+  }
+};
+
+const getReserva = async (id: string): Promise<IStatusReserva> => {
+  try {
+    const response = await api.get(`/reserva/${id}`, {
+      headers: {
+        Authorization: `${localStorage.getItem("token-parkud")}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    const errorReturn = {
+      success: false,
+      user: null,
+    };
+
+    if (axios.isAxiosError(error)) {
+      return {
+        ...errorReturn,
+        error: error.response?.data.error || "Falló la solicitud al servidor",
+        reserva: null,
+      };
+    }
+
+    return {
+      ...errorReturn,
+      error: "Falló la solicitud al servidor",
+      reserva: null,
+    };
+  }
+};
+
+export { sendReserva, registerOutput, registerEntry, getReserva };
