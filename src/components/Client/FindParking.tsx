@@ -94,7 +94,6 @@ const FindParking = ({ setSedes, sede }: Props) => {
   const handleFindParking = (data: IFindSede) => {
     setLoadingFind(true);
     findSedes(data).then(({ sedes }) => {
-      console.log(sedes);
       setLoadingFind(false);
       if (sedes.length === 0) {
         const notification = {

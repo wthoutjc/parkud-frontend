@@ -40,8 +40,6 @@ const updateSede = async (data: ISede, idSede: number): Promise<IResponse> => {
       }),
     };
 
-    console.log(postData);
-
     const response = await api.put(`sede/editar/${idSede}`, postData, {
       headers: {
         Authorization: `${localStorage.getItem("token-parkud")}`,

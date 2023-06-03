@@ -88,6 +88,7 @@ const Client = () => {
               sx={{
                 width: "60%",
               }}
+              onClick={() => setOpen(false)}
             />
             <Box
               sx={{

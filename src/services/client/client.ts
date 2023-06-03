@@ -91,6 +91,7 @@ const findSedes = async (data: IFindSede): Promise<IResponseFindSedes> => {
           idCaracteristica: String(itemParsed.idCaracteristica),
         };
       }),
+
       tiposParqueaderos: data.typesParking.map((item) => {
         const itemParsed = JSON.parse(item) as ITiposParqueaderos;
         return {

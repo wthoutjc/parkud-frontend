@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useState } from "react";
 import {
   ListItem,
@@ -13,7 +13,6 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ListItemIcon from "@mui/material/ListItemIcon";
-import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 // StyledComponents
@@ -31,7 +30,6 @@ import SidebarList from "./SidebarList";
 import { useAuth } from "../../../hooks";
 
 export function Sidebar() {
-  const navigate = useNavigate();
   const { LogOut } = useAuth();
 
   const { user } = useAppSelector((state) => state.auth);
@@ -110,11 +108,6 @@ export function Sidebar() {
         </StyledDrawerHeader>
         <List>
           {[
-            {
-              message: "Cuenta",
-              icon: <AccountBoxIcon />,
-              action: () => navigate("/account"),
-            },
             {
               message: "Cerrar sesión",
               icon: <LogoutIcon />,
