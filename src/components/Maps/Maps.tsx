@@ -3,12 +3,15 @@ import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
 
 // Components
 import { MapsSkeleton } from ".";
+import { ILocation } from "../../interfaces";
 
 interface Props {
-  open: () => void;
+  open: (idSede: number) => void;
+  zoom?: number;
+  locations: ILocation[];
 }
 
-const Maps = ({ open }: Props) => {
+const Maps = ({ open, zoom = 14, locations }: Props) => {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_API_KEY,
   });
@@ -18,12 +21,10 @@ const Maps = ({ open }: Props) => {
   if (!isLoaded) return <MapsSkeleton />;
 
   return (
-    <GoogleMap zoom={14} center={center} mapContainerClassName="parkud__map">
-      <Marker onClick={open} position={center} />
-      <Marker onClick={open} position={center} />
-      <Marker onClick={open} position={center} />
-      <Marker onClick={open} position={center} />
-      <Marker onClick={open} position={center} />
+    <GoogleMap zoom={zoom} center={center} mapContainerClassName="parkud__map">
+      {locations.map(({ idSede, lat, lng }, i) => (
+        <Marker key={i} onClick={() => open(idSede)} position={{ lat, lng }} />
+      ))}
     </GoogleMap>
   );
 };

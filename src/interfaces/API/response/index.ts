@@ -11,3 +11,5 @@ export * from "./ciudad";
 export * from "./caracteristica";
 export * from "./regional";
 export * from "./responseParqueaderos";
+export * from "./responseFindSedes";
+export * from "./responseCreditCards";

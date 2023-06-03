@@ -1,45 +1,45 @@
-import { useState } from "react";
-import { Box, IconButton, Paper, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Box, IconButton, Paper } from "@mui/material";
 
 // Components
-import { Maps, Table } from "../../components";
+import { FindParking, Maps } from "../../components";
 
 // Icons
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
+// Interfaces
+import { ILocation, IResponseSedeClient } from "../../interfaces";
+
 const Client = () => {
   const [open, setOpen] = useState(true);
 
+  const [sedes, setSedes] = useState<IResponseSedeClient[]>([]);
+  const [locations, setLocations] = useState<ILocation[]>([]);
+
+  const [sede, setSede] = useState<null | IResponseSedeClient>(null);
+
+  const handleSelectSede = (idSede: number) => {
+    setOpen(true);
+    const sede = sedes.find((sede) => sede.idSede === idSede);
+    if (sede) setSede(sede);
+  };
+
+  useEffect(() => {
+    if (sedes.length > 0) {
+      setOpen(false);
+      setLocations(
+        sedes.map(({ idSede, latitud, longitud }) => ({
+          idSede,
+          lat: latitud,
+          lng: longitud,
+        }))
+      );
+    }
+  }, [sedes]);
+
   return (
     <Box>
-      {/* <Table
-        to="xd"
-        loading={false}
-        page={1}
-        setPage={() => {}}
-        limit={20}
-        setLimit={() => {}}
-        totalData={1000}
-        title="Parqueaderos"
-        columns={["ID", "Nombre", "Costo"]}
-        data={[
-          { id: "1", name: "Parqueadero 1", cost: "1000" },
-          { id: "2", name: "Parqueadero 2", cost: "2000" },
-          { id: "3", name: "Parqueadero 3", cost: "3000" },
-        ]}
-        context={{
-          delete: {
-            enabled: false,
-          },
-          update: {
-            enabled: false,
-          },
-          read: {
-            enabled: true,
-          },
-        }}
-      /> */}
       <Box
         sx={{
           display: "flex",
@@ -87,18 +87,7 @@ const Client = () => {
                   />
                 </IconButton>
               </Box>
-              <Box>
-                <Box
-                  sx={{
-                    width: "100%",
-                    p: 2,
-                  }}
-                >
-                  <Typography variant="h6" fontWeight={600}>
-                    Tittle
-                  </Typography>
-                </Box>
-              </Box>
+              <FindParking setSedes={setSedes} sede={sede} />
             </Box>
           </Box>
         )}
@@ -108,7 +97,7 @@ const Client = () => {
           }}
         >
           <Paper elevation={10}>
-            <Maps open={() => setOpen(true)} />
+            <Maps open={handleSelectSede} zoom={13} locations={locations} />
           </Paper>
         </Box>
         <Box

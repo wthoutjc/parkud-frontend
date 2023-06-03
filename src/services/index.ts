@@ -4,3 +4,4 @@ export * from "./admin";
 export * from "./regionales";
 export * from "./operator";
 export * from "./reserva";
+export * from "./client";

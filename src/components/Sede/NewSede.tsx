@@ -21,7 +21,13 @@ import {
 } from "@mui/material";
 
 // Interfaces
-import { ICharacteristic, ISede } from "../../interfaces";
+import {
+  ICharacteristic,
+  ISede,
+  ICaracteristica,
+  ICiudades,
+  IRegional,
+} from "../../interfaces";
 
 // React Hook Form
 import { Controller, useForm } from "react-hook-form";
@@ -32,6 +38,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import FmdGoodIcon from "@mui/icons-material/FmdGood";
 import LocalParkingIcon from "@mui/icons-material/LocalParking";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
+import HourglassTopIcon from '@mui/icons-material/HourglassTop';
+import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 
 // React Router DOM
 import { useNavigate } from "react-router-dom";
@@ -68,28 +76,13 @@ const NewSede = () => {
       nombre: string;
     }[]
   >([]);
-  const [regionales, setRegionales] = useState<
-    {
-      idUbicacion: number;
-      descripcion: string;
-    }[]
-  >([]);
   const [location, setLocation] = useState<
     { lat: number; lng: number } | undefined
   >(undefined);
 
-  const [ciudades, setCiudades] = useState<
-    {
-      idUbicacion: number;
-      descripcion: string;
-    }[]
-  >([]);
-  const [caracteristicas, setCaracteristicas] = useState<
-    {
-      idCaracteristica: number;
-      nombre: string;
-    }[]
-  >([]);
+  const [regionales, setRegionales] = useState<IRegional[]>([]);
+  const [ciudades, setCiudades] = useState<ICiudades[]>([]);
+  const [caracteristicas, setCaracteristicas] = useState<ICaracteristica[]>([]);
 
   const {
     register,
@@ -509,7 +502,7 @@ const NewSede = () => {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <AccountCircleIcon />
+                      <HourglassTopIcon />
                     </InputAdornment>
                   ),
                 }}
@@ -537,7 +530,7 @@ const NewSede = () => {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <AccountCircleIcon />
+                      <HourglassBottomIcon />
                     </InputAdornment>
                   ),
                 }}

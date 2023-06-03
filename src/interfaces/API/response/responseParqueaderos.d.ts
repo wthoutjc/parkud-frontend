@@ -17,6 +17,13 @@ export interface IReserva {
   idReserva: number;
 }
 
+export interface IClientReserva {
+  idSede: number;
+  idCard: number | string;
+  startTime: string;
+  endTime: string;
+}
+
 export interface IParqueaderos {
   idParqueadero: number;
   reservas: IReserva[];
