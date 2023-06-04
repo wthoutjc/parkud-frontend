@@ -64,7 +64,7 @@ export function Table({
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
       const newSelecteds = data?.map((row) => row[itemsData[0].key]);
-      setSelected(newSelecteds);
+      setSelected(newSelecteds.map((item) => String(item)));
       return;
     }
     setSelected([]);
@@ -146,7 +146,7 @@ export function Table({
           </TableHead>
           <TableBody>
             {data?.map((row, index) => {
-              const isItemSelected = isSelected(row[itemsData[0].key]);
+              const isItemSelected = isSelected(String(row[itemsData[0].key]));
 
               return (
                 <StyledTableRow

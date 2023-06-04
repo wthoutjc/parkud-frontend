@@ -12,7 +12,7 @@ export interface IResponseStatisticReserva {
 }
 
 export interface IResponseStatisticGanancia {
-  ganancias: string;
+  ganancias: number;
   mes: string;
 }
 

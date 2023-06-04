@@ -4,7 +4,7 @@ import {
   CategoryScale,
   LinearScale,
   BarElement,
-  ChartDataset,
+  ChartData,
 } from "chart.js";
 import { useEffect, useState } from "react";
 import {
@@ -27,62 +27,50 @@ const data = (
   labels: string[],
   stats: TypeStats,
   type: "cupos" | "reservas" | "ganancias" | "Seleccionar"
-) => {
-  const datasets: ChartDataset<"bar", { x: string; y: number }[]>[] =
-    stats.reduce((acc, stat) => {
-      let dataset;
-      if (type === "cupos") {
-        const { porcentaje, tipoParqueadero } = stat as IResponseStatisticCupos;
-        dataset = {
-          label: tipoParqueadero,
-          data: [
-            {
-              x: tipoParqueadero,
-              y: Number(porcentaje),
-            },
-          ],
-          backgroundColor: randomColor(),
-        };
-      }
-      if (type === "reservas") {
-        const { cantidad, mes } = stat as IResponseStatisticReserva;
-        dataset = {
-          label: mes,
-          data: [
-            {
-              x: mes,
-              y: Number(cantidad),
-            },
-          ],
-          backgroundColor: randomColor(),
-        };
-      }
-      if (type === "ganancias") {
-        const { ganancias, mes } = stat as IResponseStatisticGanancia;
-        dataset = {
-          label: mes,
-          data: [
-            {
-              x: mes,
-              y: Number(ganancias),
-            },
-          ],
-          backgroundColor: randomColor(),
-        };
-      }
-
-      if (dataset) {
-        acc.push(dataset);
-      }
-
-      return acc;
-    }, [] as ChartDataset<"bar", { x: string; y: number }[]>[]);
-
-  return {
-    labels,
-    datasets,
-  };
-};
+) => ({
+  labels,
+  datasets: stats.map((stat) => {
+    if (type === "cupos") {
+      const { porcentaje, tipoParqueadero } = stat as IResponseStatisticCupos;
+      return {
+        label: tipoParqueadero,
+        data: [
+          {
+            x: tipoParqueadero,
+            y: Number(porcentaje),
+          },
+        ],
+        backgroundColor: randomColor(),
+      };
+    }
+    if (type === "reservas") {
+      const { cantidad, mes } = stat as IResponseStatisticReserva;
+      return {
+        label: mes,
+        data: [
+          {
+            x: mes,
+            y: Number(cantidad),
+          },
+        ],
+        backgroundColor: randomColor(),
+      };
+    }
+    if (type === "ganancias") {
+      const { ganancias, mes } = stat as IResponseStatisticGanancia;
+      return {
+        label: mes,
+        data: [
+          {
+            x: mes,
+            y: Number(ganancias),
+          },
+        ],
+        backgroundColor: randomColor(),
+      };
+    }
+  }),
+});
 
 interface Props {
   stats: TypeStats;
@@ -128,7 +116,13 @@ const BarChart = ({ stats, type }: Props) => {
       options={{
         responsive: true,
       }}
-      data={data(labels, stats, type)}
+      data={
+        data(labels, stats, type) as ChartData<
+          "bar",
+          { x: string; y: number }[],
+          string
+        >
+      }
     />
   );
 };

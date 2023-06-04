@@ -251,7 +251,9 @@ const Statistics = () => {
           </Box>
           <Box>
             <Typography variant="body1">Diagrama de barras</Typography>
-            <BarChart stats={stats} type={watch("typeStat")} />
+            {stats.length > 0 && (
+              <BarChart stats={stats} type={watch("typeStat")} />
+            )}
           </Box>
           <Box>
             <Typography variant="body1">Diagrama de dispersión</Typography>
