@@ -1,4 +1,3 @@
-export * from "./Stat";
-export * from "./DoughnutChart";
-export * from "./LineChart";
-export * from "./UserChart";
+export * from "./BarChart";
+export * from "./PieChart";
+export * from "./ScatterChar";

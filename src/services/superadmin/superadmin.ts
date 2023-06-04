@@ -3,7 +3,87 @@ import axios from "axios";
 import { api } from "../../utils";
 
 // Interfaces
-import { ILog, IResponse, IResponseLogs } from "../../interfaces";
+import {
+  IGenerateReports,
+  ILog,
+  IResponse,
+  IResponseExportLogs,
+  IResponseLogs,
+  IResponseStatistics,
+  IStatistics,
+} from "../../interfaces";
+
+const getStats = async (data: IStatistics): Promise<IResponseStatistics> => {
+  try {
+    const { regional, typeStat, idSede } = data;
+    const url = `/estadisticas/${typeStat}${
+      regional ? `/${regional}` : idSede ? "/0" : ""
+    }${idSede ? `/${idSede}` : ""}`;
+
+    console.log(url);
+
+    const response = await api.get(url, {
+      headers: {
+        Authorization: `${localStorage.getItem("token-parkud")}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    const errorReturn = {
+      success: false,
+      user: null,
+    };
+
+    if (axios.isAxiosError(error)) {
+      return {
+        ...errorReturn,
+        error: error.response?.data.error || "Falló la solicitud al servidor",
+        estadistica: [],
+      };
+    }
+
+    return {
+      ...errorReturn,
+      error: "Falló la solicitud al servidor",
+      estadistica: [],
+    };
+  }
+};
+
+const exportReport = async ({
+  typeExport,
+  typeReport,
+}: IGenerateReports): Promise<IResponseExportLogs> => {
+  try {
+    const response = await api.get(`/reportes/${typeReport}/${typeExport}`, {
+      headers: {
+        Authorization: `${localStorage.getItem("token-parkud")}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    const errorReturn = {
+      success: false,
+      user: null,
+    };
+
+    if (axios.isAxiosError(error)) {
+      return {
+        ...errorReturn,
+        error: error.response?.data.error || "Falló la solicitud al servidor",
+        export: "",
+      };
+    }
+
+    return {
+      ...errorReturn,
+      error: "Falló la solicitud al servidor",
+      export: "",
+    };
+  }
+};
 
 const unblockUser = async (email: string): Promise<IResponse> => {
   try {
@@ -50,8 +130,6 @@ const getLogs = async (
       fechaFin: String(log.endDate),
     };
 
-    console.log(postData);
-
     const response = await api.post(
       `usuario/logs/${limit}/${offset}`,
       postData,
@@ -87,4 +165,4 @@ const getLogs = async (
   }
 };
 
-export { unblockUser, getLogs };
+export { getStats, exportReport, unblockUser, getLogs };

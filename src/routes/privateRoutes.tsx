@@ -15,7 +15,7 @@ import {
   Reserva,
   BlockedUsers,
   UserTraceability,
-  GenerateReports,
+  Reports,
 } from "../components";
 
 const privateRoutes: IRoute[] = [
@@ -88,7 +88,7 @@ const privateRoutes: IRoute[] = [
   {
     path: "/reports",
     name: "Generar reportes",
-    element: <AuthLayout children={<GenerateReports />} />,
+    element: <AuthLayout children={<Reports />} />,
     exact: true,
   },
 ];

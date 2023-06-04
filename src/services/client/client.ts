@@ -80,9 +80,9 @@ const getCreditCards = async (): Promise<IResponseCreditCards> => {
   }
 };
 
-const findSedes = async (data: IFindSede): Promise<IResponseFindSedes> => {
+const findSedes = async (data?: IFindSede): Promise<IResponseFindSedes> => {
   try {
-    const postData = {
+    const postData = data && {
       region: String(data.regional),
       ciudad: String(data.city),
       caracteristicas: data.characteristics.map((item) => {
@@ -103,7 +103,7 @@ const findSedes = async (data: IFindSede): Promise<IResponseFindSedes> => {
       fidelizacion: data.loyalty ? "1" : "0",
     };
 
-    const response = await api.post(`/sede/buscar-sede`, postData, {
+    const response = await api.post(`/sede/buscar-sede`, postData ?? {}, {
       headers: {
         Authorization: `${localStorage.getItem("token-parkud")}`,
       },

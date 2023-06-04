@@ -14,3 +14,5 @@ export * from "./responseParqueaderos";
 export * from "./responseFindSedes";
 export * from "./responseCreditCards";
 export * from "./responseLog";
+export * from "./responseExport";
+export * from "./statistics";
