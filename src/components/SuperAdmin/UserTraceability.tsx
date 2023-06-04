@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {
   Box,
   Button,
@@ -6,22 +6,23 @@ import {
   InputAdornment,
   TextField,
   Typography,
+  MenuItem,
 } from "@mui/material";
 
 // Services
-import { getLogs } from "../../services";
+import { getLogs, getAllUSers } from "../../services";
 
 // React Hook Form
 import { useForm } from "react-hook-form";
 
 // Interfaces
-import { ILog } from "../../interfaces";
+import { ILog, IResponseAllUser } from "../../interfaces";
 
 // Icons
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import SearchIcon from "@mui/icons-material/Search";
-import HourglassTopIcon from '@mui/icons-material/HourglassTop';
-import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import HourglassTopIcon from "@mui/icons-material/HourglassTop";
+import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
 
 // uuid
 import { v4 as uuid } from "uuid";
@@ -51,12 +52,18 @@ const UserTraceability = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
 
+  const [users, setUsers] = useState<IResponseAllUser[]>([]);
+
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<ILog>();
+  } = useForm<ILog>({
+    defaultValues: {
+      id: "Seleccionar",
+    },
+  });
 
   const handleSearch = useCallback(
     async (data: ILog) => {
@@ -82,6 +89,14 @@ const UserTraceability = () => {
     [limit, page, dispatch]
   );
 
+  useEffect(() => {
+    setLoading(true);
+    getAllUSers().then(({ usuarios }) => {
+      setLoading(false);
+      setUsers(usuarios);
+    });
+  }, []);
+
   return (
     <Box
       sx={{
@@ -102,29 +117,39 @@ const UserTraceability = () => {
         }}
       >
         <TextField
-          fullWidth
           disabled={loading}
-          type="number"
-          placeholder="Ej 1"
-          autoComplete="parkud-id-user"
-          label="ID Usuario*"
-          sx={{ mb: 2 }}
+          fullWidth
+          select
+          placeholder="Ej Pepito Pérez"
+          label="Administrador*"
           error={!!errors.id}
+          sx={{ mb: 2 }}
           helperText={
-            errors.id ? errors.id.message : "Escribe el ID del usuario..."
+            errors.id
+              ? errors.id.message
+              : "Selecciona un administrador para esta sede"
           }
           {...register("id", {
-            required: "El ID del usuario es requerido",
+            required: "El administrador es obligatorio",
+            validate: (value) =>
+              value !== "Seleccionar" || "Selecciona una administrador",
           })}
-          value={watch("id") || ""}
+          value={watch("id")}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <AccountCircleIcon />
+                <SupervisedUserCircleIcon />
               </InputAdornment>
             ),
           }}
-        />
+        >
+          <MenuItem value={"Seleccionar"}>Seleccionar</MenuItem>
+          {users.map(({ usuario, idUsuario }) => (
+            <MenuItem key={idUsuario} value={idUsuario}>
+              {usuario}
+            </MenuItem>
+          ))}
+        </TextField>
         <Box
           sx={{
             display: "flex",

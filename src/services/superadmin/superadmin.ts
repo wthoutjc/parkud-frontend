@@ -8,12 +8,44 @@ import {
   IGenerateReports,
   ILog,
   IResponse,
+  IResponseAllUsers,
   IResponseExportLogs,
   IResponseLogs,
   IResponseSettings,
   IResponseStatistics,
   IStatistics,
 } from "../../interfaces";
+
+const getAllUSers = async (): Promise<IResponseAllUsers> => {
+  try {
+    const response = await api.get(`usuario/todos`, {
+      headers: {
+        Authorization: `${localStorage.getItem("token-parkud")}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    const errorReturn = {
+      success: false,
+      user: null,
+    };
+
+    if (axios.isAxiosError(error)) {
+      return {
+        ...errorReturn,
+        error: error.response?.data.error || "Falló la solicitud al servidor",
+        usuarios: [],
+      };
+    }
+
+    return {
+      ...errorReturn,
+      error: "Falló la solicitud al servidor",
+      usuarios: [],
+    };
+  }
+};
 
 const updateSetting = async ({
   id,
@@ -232,6 +264,7 @@ const getLogs = async (
 };
 
 export {
+  getAllUSers,
   updateSetting,
   getSettings,
   getStats,

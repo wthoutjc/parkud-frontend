@@ -17,3 +17,4 @@ export * from "./responseLog";
 export * from "./responseExport";
 export * from "./statistics";
 export * from "./responseSettings";
+export * from "./responseUsers";

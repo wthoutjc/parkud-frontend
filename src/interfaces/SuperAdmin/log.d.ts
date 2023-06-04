@@ -1,5 +1,5 @@
 export interface ILog {
-  id: number;
+  id: number | string;
   startDate: string;
   endDate: string;
 }
