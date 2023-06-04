@@ -20,6 +20,8 @@ import { ILog } from "../../interfaces";
 // Icons
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SearchIcon from "@mui/icons-material/Search";
+import HourglassTopIcon from '@mui/icons-material/HourglassTop';
+import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 
 // uuid
 import { v4 as uuid } from "uuid";
@@ -102,7 +104,7 @@ const UserTraceability = () => {
         <TextField
           fullWidth
           disabled={loading}
-          type="text"
+          type="number"
           placeholder="Ej 1"
           autoComplete="parkud-id-user"
           label="ID Usuario*"
@@ -151,7 +153,7 @@ const UserTraceability = () => {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <AccountCircleIcon />
+                  <HourglassTopIcon />
                 </InputAdornment>
               ),
             }}
@@ -177,7 +179,7 @@ const UserTraceability = () => {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <AccountCircleIcon />
+                  <HourglassBottomIcon />
                 </InputAdornment>
               ),
             }}
