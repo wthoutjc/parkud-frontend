@@ -4,14 +4,82 @@ import { api } from "../../utils";
 
 // Interfaces
 import {
+  IConfiguracion,
   IGenerateReports,
   ILog,
   IResponse,
   IResponseExportLogs,
   IResponseLogs,
+  IResponseSettings,
   IResponseStatistics,
   IStatistics,
 } from "../../interfaces";
+
+const updateSetting = async ({
+  id,
+  valor,
+}: IConfiguracion): Promise<IResponse> => {
+  try {
+    const response = await api.put(
+      `usuario/config-general/${id}`,
+      { valor },
+      {
+        headers: {
+          Authorization: `${localStorage.getItem("token-parkud")}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    const errorReturn = {
+      success: false,
+      user: null,
+    };
+
+    if (axios.isAxiosError(error)) {
+      return {
+        ...errorReturn,
+        error: error.response?.data.error || "Falló la solicitud al servidor",
+      };
+    }
+
+    return {
+      ...errorReturn,
+      error: "Falló la solicitud al servidor",
+    };
+  }
+};
+
+const getSettings = async (): Promise<IResponseSettings> => {
+  try {
+    const response = await api.get(`usuario/config-general`, {
+      headers: {
+        Authorization: `${localStorage.getItem("token-parkud")}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    const errorReturn = {
+      success: false,
+      user: null,
+    };
+
+    if (axios.isAxiosError(error)) {
+      return {
+        ...errorReturn,
+        error: error.response?.data.error || "Falló la solicitud al servidor",
+        configuraciones: [],
+      };
+    }
+
+    return {
+      ...errorReturn,
+      error: "Falló la solicitud al servidor",
+      configuraciones: [],
+    };
+  }
+};
 
 const getStats = async (data: IStatistics): Promise<IResponseStatistics> => {
   try {
@@ -19,8 +87,6 @@ const getStats = async (data: IStatistics): Promise<IResponseStatistics> => {
     const url = `/estadisticas/${typeStat}${
       regional ? `/${regional}` : idSede ? "/0" : ""
     }${idSede ? `/${idSede}` : ""}`;
-
-    console.log(url);
 
     const response = await api.get(url, {
       headers: {
@@ -165,4 +231,11 @@ const getLogs = async (
   }
 };
 
-export { getStats, exportReport, unblockUser, getLogs };
+export {
+  updateSetting,
+  getSettings,
+  getStats,
+  exportReport,
+  unblockUser,
+  getLogs,
+};

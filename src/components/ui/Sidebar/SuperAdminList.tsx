@@ -3,7 +3,8 @@ import { ISidebarData } from "../../../interfaces/ui/sidebarData";
 // Icons
 import BlockIcon from "@mui/icons-material/Block";
 import GroupIcon from "@mui/icons-material/Group";
-import QueryStatsIcon from '@mui/icons-material/QueryStats';
+import QueryStatsIcon from "@mui/icons-material/QueryStats";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 const SUPER_ADMIN_LIST: ISidebarData[] = [
   {
@@ -20,6 +21,11 @@ const SUPER_ADMIN_LIST: ISidebarData[] = [
     message: "Reportes",
     icon: <QueryStatsIcon />,
     link: "/reports",
+  },
+  {
+    message: "Configuración",
+    icon: <SettingsIcon />,
+    link: "/settings",
   },
 ];
 

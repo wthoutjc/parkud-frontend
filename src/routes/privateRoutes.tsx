@@ -16,6 +16,7 @@ import {
   BlockedUsers,
   UserTraceability,
   Reports,
+  Settings,
 } from "../components";
 
 const privateRoutes: IRoute[] = [
@@ -89,6 +90,12 @@ const privateRoutes: IRoute[] = [
     path: "/reports",
     name: "Generar reportes",
     element: <AuthLayout children={<Reports />} />,
+    exact: true,
+  },
+  {
+    path: "/settings",
+    name: "Configuración",
+    element: <AuthLayout children={<Settings />} />,
     exact: true,
   },
 ];

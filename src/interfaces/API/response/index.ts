@@ -16,3 +16,4 @@ export * from "./responseCreditCards";
 export * from "./responseLog";
 export * from "./responseExport";
 export * from "./statistics";
+export * from "./responseSettings";
